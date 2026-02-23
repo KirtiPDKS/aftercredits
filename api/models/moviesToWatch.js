@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const User = require("./user");
-const Movie = require("./movie"); 
+const Movie = require("./movies"); 
 
 
 // A Schema defines the "shape" of entries in a collection. This is similar to
