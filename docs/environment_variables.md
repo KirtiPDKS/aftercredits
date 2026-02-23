@@ -70,12 +70,12 @@ The backend api currently uses four environment variables:
 
   This is the URL that describes the location of the mongodb database, also
   known as a _connection string_. The default value is
-  `mongodb://0.0.0.0/acebook`. It consists of three parts:
+  `mongodb://0.0.0.0/after-credits`. It consists of three parts:
 
   - `mongodb://` is the _protocol_ of the url, similar to `http://` for http
     requests.
   - `0.0.0.0` is the _host ip_. All 0s means localhost, your local machine.
-  - `acebook` is the database name
+  - `after-credits` is the database name
 
   You might change this environment variable if you were using a cloud database
   to store your data, such as MongoDB Atlas, instead of a local mongodb
@@ -116,4 +116,4 @@ The backend api currently uses four environment variables:
 When we run our tests, the `.env.test` file is loaded, instead of the regular
 `.env` file. This allows us to set different values for our environment
 variables, such as updating the `MONGODB_URL` to point to a test database
-instead of the main acebook database.
+instead of the main after-credits database.

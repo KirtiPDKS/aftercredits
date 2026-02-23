@@ -93,12 +93,12 @@ And the body of the response would look like this.
     "posts": [
         {
             "_id": "62f8ef0e6c1ffcf74cbbb181",
-            "message": "Hello, this is my first Acebook post!",
+            "message": "Hello, this is my first after-credits post!",
             "__v": 0
         },
         {
             "_id": "62f8ef366c1ffcf74cbbb188",
-            "message": "Welcome to Acebook! Have an Acetime :)",
+            "message": "Welcome to after-credits! Have an Acetime :)",
             "__v": 0
         },
         {
