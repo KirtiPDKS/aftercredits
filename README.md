@@ -1,4 +1,4 @@
-## Acebook MERN Template
+## after-credits MERN Template
 
 In this project, you are task with working on an existing application. A
 significant part of the challenge will be to familiarise yourself with the
@@ -46,7 +46,7 @@ If you haven't already, make sure you have node and NVM installed.
 ### Set up your project
 
 1. Have one team member fork this repository
-2. Rename the fork to `acebook-<team name>`
+2. Rename the fork to `after-credits-<team name>`
 3. Every team member clone the fork to their local machine
 4. Install dependencies for both the `frontend` and `api` applications:
    ```
@@ -60,15 +60,15 @@ If you haven't already, make sure you have node and NVM installed.
 6. Install MongoDB
    ```
    brew tap mongodb/brew
-   brew install mongodb-community@6.0
+   brew install mongodb-community@8.0
    ```
    _Note:_ If you see a message that says
-   `If you need to have mongodb-community@6.0 first in your PATH, run:`, follow
+   `If you need to have mongodb-community@8.0 first in your PATH, run:`, follow
    the instruction. Restart your terminal after this.
 7. Start MongoDB
 
    ```
-   brew services start mongodb-community@6.0
+   brew services start mongodb-community@8.0
    ```
 
 ### Setting up environment variables.
@@ -88,7 +88,7 @@ VITE_BACKEND_URL="http://localhost:3000"
 Create a file `api/.env` with the following contents:
 
 ```
-MONGODB_URL="mongodb://0.0.0.0/acebook"
+MONGODB_URL="mongodb://0.0.0.0/after-credits"
 NODE_ENV="development"
 JWT_SECRET="secret"
 ```
