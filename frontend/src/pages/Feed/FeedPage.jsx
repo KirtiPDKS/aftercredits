@@ -33,12 +33,14 @@ export function FeedPage() {
 
   return (
     <>
-      <h2>Movies</h2>
-      <p>Browse through all films.</p>
-      <div className="movie-feed" role="movie-feed">
-        Writing extra content 
+      <h2 className="mb-1">Movies</h2>
+      <p className="text-body-secondary">Browse through all films.</p>
+      <div className="container row" >
         {movies.map((movie) => (
-          <Movies movie={movie} key={movie._id} />
+          <div className="col-12 col-sm-6 col-md-4 col-lg-3 mb-4"
+          key={movie._id}> 
+          <Movies movie={movie} />
+          </div> 
         ))}
       </div>
       <LogoutButton />
