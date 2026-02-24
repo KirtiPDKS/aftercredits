@@ -17,6 +17,12 @@ const Movie = mongoose.model("Movie", MovieSchema);
 // These lines will create a test movie every time the server starts.
 // You can delete this once you are creating your own movies.
 const dateTimeString = new Date().toLocaleString("en-GB");
-// new Movie({ message: `Test message, created at ${dateTimeString}` }).save();
+new Movie({
+  title: "Inception",
+  genre: "Science Fiction",
+  release_year: 2010,
+  description: "A skilled thief enters people's dreams to steal secrets but is given a chance at redemption with one final mission.",
+  image: "https://example.com/inception.jpg"
+}).save();
 
 module.exports = Movie;

@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { vi } from "vitest";
+import '@testing-library/jest-dom'
 
 import { FeedPage } from "../../src/pages/Feed/FeedPage";
 import { getMovies } from "../../src/services/movies";
@@ -32,8 +33,9 @@ describe("Feed Page", () => {
 
     render(<FeedPage />);
 
-    const movie = await screen.findByRole("article");
-    expect(movie.textContent).toEqual("Test Movie");
+    expect(screen.getByText("Test Movie")).toBeInTheDocument();
+    expect(screen.getByText("2000")).toBeInTheDocument();
+    expect(screen.getByText("This is a test film")).toBeInTheDocument();
   });
 
   test("It navigates to login if no token is present", async () => {
