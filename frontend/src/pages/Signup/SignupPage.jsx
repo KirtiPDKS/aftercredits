@@ -9,9 +9,15 @@ export function SignupPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+
+  const numbers = [1,2,3,4,5,6,7,8,9,0]
+
+  const hasNumber = numbers.some(num =>
+    password.includes(num.toString())
+  )
   async function handleSubmit(event) {
     event.preventDefault();
-    if (password.length >= 8 === true && password.toLowerCase() !== password){
+    if (password.length >= 8 === true && password.toLowerCase() !== password && hasNumber === true){
       if (email.includes('@') && email.includes('.')){
       try{
       await signup(email,username, password);
@@ -76,6 +82,10 @@ export function SignupPage() {
                 {password.toLowerCase() === password &&
                   <div className="text-danger small">
                     Password needs a capital letter
+                  </div>}
+                  {hasNumber === false &&
+                  <div className="text-danger small">
+                    Password needs a number
                   </div>}
               </div>
 

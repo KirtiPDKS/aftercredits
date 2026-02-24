@@ -10,9 +10,11 @@ createFetchMock(vi).enableMocks();
 
 describe("authentication service", () => {
   describe("login", () => {
-    test("calls the backend url for a token", async () => {
-      const testEmail = "test@testEmail.com";
-      const testPassword = "12345678";
+    test("calls the backend url for a token, using email to login", async () => {
+      const emailOrUsername = "test@testEmail.com"
+      const testEmail = emailOrUsername;
+      const testUsername = emailOrUsername;
+      const testPassword = "ValidPassword";
 
       fetch.mockResponseOnce(JSON.stringify({ token: "testToken" }), {
         status: 201,
@@ -28,7 +30,7 @@ describe("authentication service", () => {
       expect(url).toEqual(`${BACKEND_URL}/tokens`);
       expect(options.method).toEqual("POST");
       expect(options.body).toEqual(
-        JSON.stringify({ email: testEmail, password: testPassword })
+        JSON.stringify({ email: testEmail, username: testUsername , password: testPassword })
       );
       expect(options.headers["Content-Type"]).toEqual("application/json");
     });
@@ -49,7 +51,7 @@ describe("authentication service", () => {
       const testEmail = "test@testEmail.com";
       const testPassword = "12345678";
 
-      fetch.mockResponseOnce(JSON.stringify({ message: "Wrong Password" }), {
+      fetch.mockResponseOnce(JSON.stringify({ message: "Password incorrec" }), {
         status: 403,
       });
 
@@ -57,7 +59,7 @@ describe("authentication service", () => {
         await login(testEmail, testPassword);
       } catch (err) {
         expect(err.message).toEqual(
-          "Received status 403 when logging in. Expected 201"
+          "Password incorrec"
         );
       }
     });
@@ -66,13 +68,15 @@ describe("authentication service", () => {
   describe("signup", () => {
     test("calls the backend url for a token", async () => {
       const testEmail = "test@testEmail.com";
-      const testPassword = "12345678";
+      const testUsername = "test"
+      const testPassword = "ValidPassword";
 
-      fetch.mockResponseOnce("", {
+      fetch.mockResponseOnce(JSON.stringify({ token: "fake-token" }), 
+      {
         status: 201,
       });
 
-      await signup(testEmail, testPassword);
+      await signup(testEmail, testUsername, testPassword);
 
       // This is an array of the arguments that were last passed to fetch
       const fetchArguments = fetch.mock.lastCall;
@@ -82,11 +86,11 @@ describe("authentication service", () => {
       expect(url).toEqual(`${BACKEND_URL}/users`);
       expect(options.method).toEqual("POST");
       expect(options.body).toEqual(
-        JSON.stringify({ email: testEmail, password: testPassword })
+        JSON.stringify({ email: testEmail, username: testUsername, password: testPassword })
       );
       expect(options.headers["Content-Type"]).toEqual("application/json");
     });
-
+    
     test("returns nothing if the signup request was a success", async () => {
       const testEmail = "test@testEmail.com";
       const testPassword = "12345678";
