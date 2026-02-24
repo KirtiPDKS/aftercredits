@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { getMovies } from "../../services/movies";
-import Movie from "../../components/Movie";
 import LogoutButton from "../../components/LogoutButton";
+import Movies from "../../components/Movie";
 
 export function FeedPage() {
   const [movies, setMovies] = useState([]);
@@ -36,8 +36,9 @@ export function FeedPage() {
       <h2>Movies</h2>
       <p>Browse through all films.</p>
       <div className="movie-feed" role="movie-feed">
+        Writing extra content 
         {movies.map((movie) => (
-          <Movie movie={movie} key={movie._id} />
+          <Movies movie={movie} key={movie._id} />
         ))}
       </div>
       <LogoutButton />

@@ -32,6 +32,8 @@ describe("Feed Page", () => {
     getMovies.mockResolvedValue({ movies: mockMovies, token: "newToken" });
 
     render(<FeedPage />);
+    
+    await screen.findByRole("article")
 
     expect(screen.getByText("Test Movie")).toBeInTheDocument();
     expect(screen.getByText("2000")).toBeInTheDocument();
