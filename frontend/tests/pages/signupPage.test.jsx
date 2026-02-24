@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { vi } from "vitest";
+import { expect, vi } from "vitest";
 
 import { useNavigate } from "react-router-dom";
 import { signup } from "../../src/services/authentication";
@@ -24,12 +24,28 @@ vi.mock("../../src/services/authentication", () => {
 async function completeSignupForm() {
   const user = userEvent.setup();
 
-  const emailInputEl = screen.getByLabelText("Email:");
-  const passwordInputEl = screen.getByLabelText("Password:");
+  const emailInputEl = screen.getByPlaceholderText("Email");
+  const useranmeInputEl = screen.getByPlaceholderText("Username");
+  const passwordInputEl = screen.getByPlaceholderText("Password");
   const submitButtonEl = screen.getByRole("submit-button");
 
   await user.type(emailInputEl, "test@email.com");
-  await user.type(passwordInputEl, "1234");
+  await user.type(useranmeInputEl, "testusername");
+  await user.type(passwordInputEl, "ValidPassword1");
+  await user.click(submitButtonEl);
+}
+
+async function completeSignupFormInvalid() {
+  const user = userEvent.setup();
+
+  const emailInputEl = screen.getByPlaceholderText("Email");
+  const useranmeInputEl = screen.getByPlaceholderText("Username");
+  const passwordInputEl = screen.getByPlaceholderText("Password");
+  const submitButtonEl = screen.getByRole("submit-button");
+
+  await user.type(emailInputEl, "email");
+  await user.type(useranmeInputEl, "testusername");
+  await user.type(passwordInputEl, "invalid");
   await user.click(submitButtonEl);
 }
 
@@ -38,12 +54,12 @@ describe("Signup Page", () => {
     vi.resetAllMocks();
   });
 
-  test("allows a user to signup", async () => {
+  test("allows a user to signup with valid password", async () => {
     render(<SignupPage />);
 
     await completeSignupForm();
 
-    expect(signup).toHaveBeenCalledWith("test@email.com", "1234");
+    expect(signup).toHaveBeenCalledWith("test@email.com",'testusername', "ValidPassword1");
   });
 
   test("navigates to /login on successful signup", async () => {
@@ -66,4 +82,32 @@ describe("Signup Page", () => {
 
     expect(navigateMock).toHaveBeenCalledWith("/signup");
   });
+
+  test("correct error messages appear when password invalid", async () => {
+    render(<SignupPage />);
+
+    await completeSignupFormInvalid();
+
+    expect(screen.getAllByText("Password under 8 characters"));
+    expect(screen.getAllByText("Password needs a capital letter"));
+    expect(screen.getAllByText("Password needs a number"));
+  })
+
+    test("correct error messages appear when email invalid", async () => {
+    render(<SignupPage />);
+
+    await completeSignupFormInvalid();
+
+    expect(screen.getAllByText("Email needs an @"));
+    expect(screen.getAllByText('Email needs a dot'))
+  })
+    test("correct error message on screen when email or username not found", async () => {
+    render(<SignupPage />);
+
+    signup.mockRejectedValue(new Error("Email or username already in use"));
+
+    await completeSignupForm();
+
+    expect(await screen.findByText("Email or username already in use"))
+    });
 });

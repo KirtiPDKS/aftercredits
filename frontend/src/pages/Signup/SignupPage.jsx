@@ -89,7 +89,7 @@ export function SignupPage() {
                   </div>}
               </div>
 
-              <button className="btn btn-warning w-100">
+              <button role="submit-button" className="btn btn-warning w-100">
                 Submit
               </button>
             </form>

@@ -14,7 +14,7 @@ describe("authentication service", () => {
       const emailOrUsername = "test@testEmail.com"
       const testEmail = emailOrUsername;
       const testUsername = emailOrUsername;
-      const testPassword = "ValidPassword";
+      const testPassword = "ValidPassword1";
 
       fetch.mockResponseOnce(JSON.stringify({ token: "testToken" }), {
         status: 201,
@@ -37,7 +37,7 @@ describe("authentication service", () => {
 
     test("returns the token if the request was a success", async () => {
       const testEmail = "test@testEmail.com";
-      const testPassword = "12345678";
+      const testPassword = "ValidPassword1";
 
       fetch.mockResponseOnce(JSON.stringify({ token: "testToken" }), {
         status: 201,
@@ -49,7 +49,7 @@ describe("authentication service", () => {
 
     test("throws an error if the request failed", async () => {
       const testEmail = "test@testEmail.com";
-      const testPassword = "12345678";
+      const testPassword = "ValidPassword1";
 
       fetch.mockResponseOnce(JSON.stringify({ message: "Password incorrec" }), {
         status: 403,
@@ -69,7 +69,7 @@ describe("authentication service", () => {
     test("calls the backend url for a token", async () => {
       const testEmail = "test@testEmail.com";
       const testUsername = "test"
-      const testPassword = "ValidPassword";
+      const testPassword = "ValidPassword1";
 
       fetch.mockResponseOnce(JSON.stringify({ token: "fake-token" }), 
       {
@@ -90,10 +90,10 @@ describe("authentication service", () => {
       );
       expect(options.headers["Content-Type"]).toEqual("application/json");
     });
-    
+
     test("returns nothing if the signup request was a success", async () => {
       const testEmail = "test@testEmail.com";
-      const testPassword = "12345678";
+      const testPassword = "ValidPassword1";
 
       fetch.mockResponseOnce(JSON.stringify(""), {
         status: 201,
@@ -105,10 +105,10 @@ describe("authentication service", () => {
 
     test("throws an error if the request failed", async () => {
       const testEmail = "test@testEmail.com";
-      const testPassword = "12345678";
+      const testPassword = "ValidPassword";
 
       fetch.mockResponseOnce(
-        JSON.stringify({ message: "User already exists" }),
+        JSON.stringify({ message: "Email or username already in use" }),
         {
           status: 400,
         }
@@ -118,7 +118,7 @@ describe("authentication service", () => {
         await signup(testEmail, testPassword);
       } catch (err) {
         expect(err.message).toEqual(
-          "Received status 400 when signing up. Expected 201"
+          "Email or username already in use"
         );
       }
     });

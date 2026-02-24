@@ -53,7 +53,7 @@ export function LoginPage() {
                 />
               </div>
 
-              <button type="submit" className="btn btn-warning w-100">
+              <button type="submit" className="btn btn-warning w-100" role="submit-button">
                 Submit
               </button>
             </form>
