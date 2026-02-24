@@ -3,7 +3,9 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 
 const usersRouter = require("./routes/users");
-const postsRouter = require("./routes/posts");
+const postsRouter = require("./routes/movies");
+const moviesWatchedRouter = require('./routes/moviesWatched')
+const MoviesToWatchController = require('./routes/moviesToWatch')
 const authenticationRouter = require("./routes/authentication");
 const tokenChecker = require("./middleware/tokenChecker");
 
@@ -19,7 +21,9 @@ app.use(bodyParser.json());
 
 // API Routes
 app.use("/users", usersRouter);
-app.use("/posts", tokenChecker, postsRouter);
+app.use("/movies", tokenChecker, postsRouter);
+app.use('/moviesWatched', tokenChecker, moviesWatchedRouter)
+app.use('/moviesToWatch', tokenChecker, MoviesToWatchController)
 app.use("/tokens", authenticationRouter);
 
 // 404 Handler
