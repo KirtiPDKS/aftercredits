@@ -1,18 +1,18 @@
-const Post = require("../models/post");
+const Movies = require("../models/movies");
 const { generateToken } = require("../lib/token");
 
 async function getAllPosts(req, res) {
-  const posts = await Post.find();
+  const movies = await Movies.find();
   const token = generateToken(req.user_id);
-  res.status(200).json({ posts: posts, token: token });
+  res.status(200).json({ movies: movies, token: token });
 }
 
 async function createPost(req, res) {
-  const post = new Post(req.body);
-  post.save();
+  const movie = new Movies(req.body);
+  movie.save();
 
   const newToken = generateToken(req.user_id);
-  res.status(201).json({ message: "Post created", token: newToken });
+  res.status(201).json({ message: "Movie created", token: newToken });
 }
 
 const PostsController = {
