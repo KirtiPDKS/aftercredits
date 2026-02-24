@@ -18,6 +18,13 @@ const Movie = mongoose.model("Movie", MovieSchema);
 // These lines will create a test movie every time the server starts.
 // You can delete this once you are creating your own movies.
 const dateTimeString = new Date().toLocaleString("en-GB");
+new Movie({
+  title: "Inception",
+  genre: "Science Fiction",
+  release_year: 2010,
+  description: "A skilled thief enters people's dreams to steal secrets but is given a chance at redemption with one final mission.",
+  image: "https://example.com/inception.jpg"
+}).save();
 new Movie({title: `Princess Mononoke`, genre: `Fantasy epic`, release_year: 1997, description: `Princess Mononoke is a Japanese animated fantasy epic written and directed by Hayao Miyazaki and produced by Studio Ghibli. The film follows Ashitaka, a young prince caught in a conflict between industrial humans and the spirits of the forest, including the fierce San. It is celebrated for its environmental themes, moral complexity, and sweeping animation.`, director: `Hayao Miyazaki`, image: `https://upload.wikimedia.org/wikipedia/en/6/60/Princess_Mononoke_Japanese_poster.png` }).save();
 
 new Movie ({ title: `Good Will Hunting`, genre: `Drama`, release_year: 1997, description: `Good Will Hunting is a drama directed by Gus Van Sant starring Matt Damon as a self-taught mathematical genius working as a janitor at MIT. After assaulting a police officer, he must attend therapy sessions with psychologist Sean Maguire, played by Robin Williams. The film explores trauma, identity, and untapped potential, and won Academy Awards for Best Supporting Actor and Best Original Screenplay.`, director: `Gus Van Sant`, image: `https://upload.wikimedia.org/wikipedia/en/5/52/Good_Will_Hunting.png` }).save();
