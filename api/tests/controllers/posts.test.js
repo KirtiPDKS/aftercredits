@@ -2,7 +2,7 @@ const request = require("supertest");
 const JWT = require("jsonwebtoken");
 
 const app = require("../../app");
-const Post = require("../../models/post");
+const Movie = require("../../models/movies");
 const User = require("../../models/user");
 
 require("../mongodb_helper");
@@ -23,48 +23,49 @@ function createToken(userId) {
 }
 
 let token;
-describe("/posts", () => {
+describe("/movies", () => {
   beforeAll(async () => {
     const user = new User({
       email: "post-test@test.com",
+      username: "post-test",
       password: "12345678",
     });
     await user.save();
-    await Post.deleteMany({});
+    await Movie.deleteMany({});
     token = createToken(user.id);
   });
 
   afterEach(async () => {
     await User.deleteMany({});
-    await Post.deleteMany({});
+    await Movie.deleteMany({});
   });
 
   describe("POST, when a valid token is present", () => {
     test("responds with a 201", async () => {
       const response = await request(app)
-        .post("/posts")
+        .post("/movies")
         .set("Authorization", `Bearer ${token}`)
-        .send({ message: "Hello World!" });
+   
       expect(response.status).toEqual(201);
     });
 
-    test("creates a new post", async () => {
+    test("creates a new movie", async () => {
       await request(app)
-        .post("/posts")
+        .post("/movies")
         .set("Authorization", `Bearer ${token}`)
-        .send({ message: "Hello World!!" });
+        .send({ title: "Training Day" });
 
-      const posts = await Post.find();
-      expect(posts.length).toEqual(1);
-      expect(posts[0].message).toEqual("Hello World!!");
+      const movies = await Movie.find();
+      expect(movies.length).toEqual(1);
+      expect(movies[0].title).toEqual("Training Day");
     });
 
     test("returns a new token", async () => {
       const testApp = request(app);
       const response = await testApp
-        .post("/posts")
+        .post("/movies")
         .set("Authorization", `Bearer ${token}`)
-        .send({ message: "hello world" });
+        .send({ title: "Training Day" });
 
       const newToken = response.body.token;
       const newTokenDecoded = JWT.decode(newToken, process.env.JWT_SECRET);
@@ -78,25 +79,25 @@ describe("/posts", () => {
   describe("POST, when token is missing", () => {
     test("responds with a 401", async () => {
       const response = await request(app)
-        .post("/posts")
-        .send({ message: "hello again world" });
+        .post("/movies")
+        .send({ title: "Training Day" });
 
       expect(response.status).toEqual(401);
     });
 
-    test("a post is not created", async () => {
+    test("a movie is not created", async () => {
       const response = await request(app)
-        .post("/posts")
-        .send({ message: "hello again world" });
+        .post("/movies")
+        .send({ title: "Training Day" });
 
-      const posts = await Post.find();
-      expect(posts.length).toEqual(0);
+      const movies = await Movie.find();
+      expect(movies.length).toEqual(0);
     });
 
     test("a token is not returned", async () => {
       const response = await request(app)
-        .post("/posts")
-        .send({ message: "hello again world" });
+        .post("/movies")
+        .send({ title: "Training Day" });
 
       expect(response.body.token).toEqual(undefined);
     });
@@ -104,44 +105,44 @@ describe("/posts", () => {
 
   describe("GET, when token is present", () => {
     test("the response code is 200", async () => {
-      const post1 = new Post({ message: "I love all my children equally" });
-      const post2 = new Post({ message: "I've never cared for GOB" });
-      await post1.save();
-      await post2.save();
+      const movie1 = new Movie({ title: "Marty Supreme" });
+      const movie2 = new Movie({ title: "Highest 2 Lowest" });
+      await movie1.save();
+      await movie2.save();
 
       const response = await request(app)
-        .get("/posts")
+        .get("/movies")
         .set("Authorization", `Bearer ${token}`);
 
       expect(response.status).toEqual(200);
     });
 
-    test("returns every post in the collection", async () => {
-      const post1 = new Post({ message: "howdy!" });
-      const post2 = new Post({ message: "hola!" });
-      await post1.save();
-      await post2.save();
+    test("returns every movie in the collection", async () => {
+      const movie1 = new Movie({ title: "Marty Supreme" });
+      const movie2 = new Movie({ title: "Highest 2 Lowest" });
+      await movie1.save();
+      await movie2.save();
 
       const response = await request(app)
-        .get("/posts")
+        .get("/movies")
         .set("Authorization", `Bearer ${token}`);
 
-      const posts = response.body.posts;
-      const firstPost = posts[0];
-      const secondPost = posts[1];
+      const movies = response.body.movies;
+      const firstMovie = movies[0];
+      const secondMovie = movies[1];
 
-      expect(firstPost.message).toEqual("howdy!");
-      expect(secondPost.message).toEqual("hola!");
+      expect(firstMovie.title).toEqual("Marty Supreme");
+      expect(secondMovie.title).toEqual("Highest 2 Lowest");
     });
 
     test("returns a new token", async () => {
-      const post1 = new Post({ message: "First Post!" });
-      const post2 = new Post({ message: "Second Post!" });
-      await post1.save();
-      await post2.save();
+      const movie1 = new Movie({ title: "Marty Supreme" });
+      const movie2 = new Movie({ title: "Highest 2 Lowest" });
+      await movie1.save();
+      await movie2.save();
 
       const response = await request(app)
-        .get("/posts")
+        .get("/movies")
         .set("Authorization", `Bearer ${token}`);
 
       const newToken = response.body.token;
@@ -155,34 +156,34 @@ describe("/posts", () => {
 
   describe("GET, when token is missing", () => {
     test("the response code is 401", async () => {
-      const post1 = new Post({ message: "howdy!" });
-      const post2 = new Post({ message: "hola!" });
-      await post1.save();
-      await post2.save();
+      const movie1 = new Movie({ title: "Marty Supreme" });
+      const movie2 = new Movie({ title: "Highest 2 Lowest" });
+      await movie1.save();
+      await movie2.save();
 
-      const response = await request(app).get("/posts");
+      const response = await request(app).get("/movies");
 
       expect(response.status).toEqual(401);
     });
 
-    test("returns no posts", async () => {
-      const post1 = new Post({ message: "howdy!" });
-      const post2 = new Post({ message: "hola!" });
-      await post1.save();
-      await post2.save();
+    test("returns no movies", async () => {
+      const movie1 = new Movie({ title: "Marty Supreme" });
+      const movie2 = new Movie({ title: "Highest 2 Lowest" });
+      await movie1.save();
+      await movie2.save();
 
-      const response = await request(app).get("/posts");
+      const response = await request(app).get("/movies");
 
-      expect(response.body.posts).toEqual(undefined);
+      expect(response.body.movies).toEqual(undefined);
     });
 
     test("does not return a new token", async () => {
-      const post1 = new Post({ message: "howdy!" });
-      const post2 = new Post({ message: "hola!" });
-      await post1.save();
-      await post2.save();
+      const movie1 = new Movie({ title: "Marty Supreme" });
+      const movie2 = new Movie({ title: "Highest 2 Lowest" });
+      await movie1.save();
+      await movie2.save();
 
-      const response = await request(app).get("/posts");
+      const response = await request(app).get("/movies");
 
       expect(response.body.token).toEqual(undefined);
     });
