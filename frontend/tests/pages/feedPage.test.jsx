@@ -29,7 +29,7 @@ describe("Feed Page", () => {
 
     const mockMovies = [{ _id: "12345", title: "Test Movie", genre: "Comedy", release_year:2000,description:"This is a test film", image:"" }];
 
-    getMovies.mockResolvedValue({ movie: mockMovies, token: "newToken" });
+    getMovies.mockResolvedValue({ movies: mockMovies, token: "newToken" });
 
     render(<FeedPage />);
 

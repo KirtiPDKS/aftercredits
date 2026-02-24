@@ -35,7 +35,7 @@ export function FeedPage() {
     <>
       <h2>Movies</h2>
       <p>Browse through all films.</p>
-      <div className="feed" role="feed">
+      <div className="movie-feed" role="movie-feed">
         {movies.map((movie) => (
           <Movie movie={movie} key={movie._id} />
         ))}
