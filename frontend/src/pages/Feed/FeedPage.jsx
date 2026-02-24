@@ -1,21 +1,21 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { getPosts } from "../../services/posts";
-import Post from "../../components/Post";
+import { getMovies } from "../../services/movies";
+import Movie from "../../components/Movie";
 import LogoutButton from "../../components/LogoutButton";
 
 export function FeedPage() {
-  const [posts, setPosts] = useState([]);
+  const [movies, setMovies] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     const loggedIn = token !== null;
     if (loggedIn) {
-      getPosts(token)
+      getMovies(token)
         .then((data) => {
-          setPosts(data.posts);
+          setMovies(data.movies);
           localStorage.setItem("token", data.token);
         })
         .catch((err) => {
@@ -33,10 +33,11 @@ export function FeedPage() {
 
   return (
     <>
-      <h2>Posts</h2>
+      <h2>Movies</h2>
+      <p>Browse through all films.</p>
       <div className="feed" role="feed">
-        {posts.map((post) => (
-          <Post post={post} key={post._id} />
+        {movies.map((movie) => (
+          <Movie movie={movie} key={movie._id} />
         ))}
       </div>
       <LogoutButton />
