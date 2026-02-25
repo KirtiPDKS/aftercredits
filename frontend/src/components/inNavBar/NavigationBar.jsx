@@ -9,7 +9,7 @@ const NavigationBar = ({loggedIn,setLoggedIn}) => {
     };
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark w-100">
+    <nav className="navbar navbar-expand-lg navbar-dark bg-dark w-100 sticky-top">
       <div className="container-fluid d-flex justify-content-between align-items-center">
 
         {/* Logo */}
