@@ -13,7 +13,9 @@ describe("Home Page", () => {
     );
 
     const heading = screen.getByRole("heading");
-    expect(heading.textContent).toEqual("Welcome to AfterCredits!");
+    expect(heading.textContent).toEqual("AfterCredits");
+    const paragraph = screen.getByRole("paragraph");
+    expect(paragraph.textContent).toEqual("Discover and Celebrate the Films you Love");
   });
 
   test("Displays a signup link", async () => {
