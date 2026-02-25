@@ -5,8 +5,9 @@ const mongoose = require("mongoose");
 const MovieSchema = new mongoose.Schema({
   title: String,
   genre: String,
-  release_year: Number,
+  releaseYear: Number,
   description: String,
+  director: String,
   image: String,
 });
 
@@ -17,6 +18,5 @@ const Movie = mongoose.model("Movie", MovieSchema);
 // These lines will create a test movie every time the server starts.
 // You can delete this once you are creating your own movies.
 const dateTimeString = new Date().toLocaleString("en-GB");
-// new Movie({ message: `Test message, created at ${dateTimeString}` }).save();
 
 module.exports = Movie;
