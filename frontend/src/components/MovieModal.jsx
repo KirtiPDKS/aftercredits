@@ -22,37 +22,63 @@ function MovieModal({ movie, onClose }) {
     }
   };
 
+  function handleRatingChange(event) {
+    const value = event.nativeEvent.data
+    const ratings = ['1', '2', '3', '4', '5']
+
+    if (ratings.includes(value)) {
+      setRating(value)
+    }
+  }
+
   return (
-  <div style={{ position: "fixed", top: 0, left: 0, width: "100%", height: "100%", backgroundColor: "rgba(0,0,0,0.5)" }}>
-    <div style={{ backgroundColor: "white", margin: "100px auto", padding: "20px", width: "400px" }}>
-      
-      <h3>{movie.title}</h3>
+<div
+  style={{position: "fixed", top: 0, left: 0, width: "100%", height: "100%", backgroundColor: "rgba(0,0,0,0.5)"}}>
+  <div className="container py-5">
+    <div className="row justify-content-center">
+      <div className="col-md-6">
 
-      <form onSubmit={handleSubmit}>
-        
-        <label>Your Review</label>
-        <textarea
-          value={review}
-          onChange={(e) => setReview(e.target.value)}
-          placeholder="What did you think?"
-        />
+        <div className="card shadow-sm p-4 position-relative">
+          
+          <button type="button" className="btn btn-warning position-absolute top-0 end-0 m-2" onClick={onClose}>x</button>
+          <h3 className="mb-4 text-center">{movie.title}</h3>
+          <form onSubmit={handleSubmit}>
+            
+            <div className="input-group mb-3">
+             <span className="input-group-text">Your Reveiw</span>
+              <textarea
+                value={review}
+                onChange={(e) => setReview(e.target.value)}
+                placeholder="What did you think?"
+                className="form-control"
+                aria-label="Your Reveiw"
+              />
+            </div>
 
-        <label>Rating (1-5)</label>
-        <input
-          type="text"
-          value={rating}
-          onChange={(e) => setRating(e.target.value)}
-        />
+            <div className="input-group mb-3">
+              <span class="input-group-text">Rating (1-5)</span>
+              <input
+                type="text"
+                min="1"
+                max="5"
+                value={rating}
+                onChange={handleRatingChange}
+                className="form-control"
+                aria-label="Rating (1-5)"
+                />
+            </div>
+            {error && <p className="text-danger">{error}</p>}
+            {success && <p className="text-success">Added to watched list!</p>}
 
-        {error && <p>{error}</p>}
-        {success && <p>Added to watched list!</p>}
+            <button type="submit" className="btn btn-warning w-100">Submit Thoughts</button>
+          </form>
 
-        <button type="submit">Save</button>
-        <button type="button" onClick={onClose}>Cancel</button>
+        </div>
 
-      </form>
+      </div>
     </div>
   </div>
+</div>
 );
 
 }
