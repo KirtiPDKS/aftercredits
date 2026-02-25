@@ -10,7 +10,7 @@ describe("User model", () => {
     const user = new User({
       email: "someone@example.com",
       username: "someone",
-      password: "password",
+      password: "ValidPassword1",
     });
 
     expect(user.email).toEqual("someone@example.com");
@@ -20,9 +20,9 @@ describe("User model", () => {
     const user = new User({
       email: "someone@example.com",
       username: "someone",
-      password: "password",
+      password: "ValidPassword1",
     });
-    expect(user.password).toEqual("password");
+    expect(user.password).toEqual("ValidPassword1");
   });
 
    it("has a username", () => {
@@ -42,7 +42,7 @@ describe("User model", () => {
   it("can save a user", async () => {
     const user = new User({
       email: "someone@example.com",
-      password: "password",
+      password: "ValidPassword1",
       username: "someone"
     });
 
@@ -50,7 +50,7 @@ describe("User model", () => {
     const users = await User.find();
 
     expect(users[0].email).toEqual("someone@example.com");
-    expect(users[0].password).toEqual("password");
+    expect(users[0].password).toEqual("ValidPassword1");
     expect(users[0].username).toEqual("someone");
   });
 
