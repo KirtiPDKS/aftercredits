@@ -4,7 +4,7 @@ import '@testing-library/jest-dom'
 
 describe("Post", () => {
   test("displays movie information when rendered", () => {
-    const testMovie = { _id: "12345", title: "Test Movie", genre: "Comedy", release_year:2000,description:"This is a test film", image:"" };
+    const testMovie = { _id: "12345", title: "Test Movie", genre: "Comedy", releaseYear:2000,description:"This is a test film", image:"" };
     render(<Movies movie={testMovie} />);
 
   expect(screen.getByText("Test Movie")).toBeInTheDocument();

@@ -14,6 +14,12 @@ html, body, #root {
 }
 .SignupLogin{
   margin-top: 7%;
+  background-image: url("https://www.shutterstock.com/shutterstock/videos/2585582/thumb/1.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: fixed;
+  inset: 0;
 }
 .splashscreen {
   background-image: url("https://www.shutterstock.com/shutterstock/videos/2585582/thumb/1.jpg");
