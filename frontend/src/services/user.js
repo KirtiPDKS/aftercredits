@@ -1,7 +1,6 @@
-// docs: https://vitejs.dev/guide/env-and-mode.html
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-export async function getMovies(token) {
+export async function getUser(username,token) {
   const requestOptions = {
     method: "GET",
     headers: {
@@ -9,19 +8,17 @@ export async function getMovies(token) {
     },
   };
 
-  const response = await fetch(`${BACKEND_URL}/movies`, requestOptions);
+  const response = await fetch(`${BACKEND_URL}/users/${username}`, requestOptions);
 
   if (response.status !== 200) {
-    throw new Error("Unable to fetch movies");
+    throw new Error("Unable to get user data");
   }
 
   const data = await response.json();
   return data;
 }
 
-
-export async function getUserWatchedMovies(username, token) {
-
+export async function getAllUsers(token) {
   const requestOptions = {
     method: "GET",
     headers: {
@@ -29,10 +26,10 @@ export async function getUserWatchedMovies(username, token) {
     },
   };
 
-  const response = await fetch(`${BACKEND_URL}/moviesWatched/${username}`, requestOptions);
+  const response = await fetch(`${BACKEND_URL}/users/all`, requestOptions);
 
   if (response.status !== 200) {
-    throw new Error("Unable to fetch movies");
+    throw new Error("Unable to get users");
   }
 
   const data = await response.json();

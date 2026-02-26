@@ -65,3 +65,54 @@ describe("/users", () => {
     });
   });
 });
+
+describe("/users/:username", () => {
+  beforeEach(async () => {
+    await User.deleteMany({});
+  });
+
+  describe("GET /users/:username", () => {
+
+    test("returns 200 + user information on successful request", async () => {
+      // Create test user
+      const user = await User.create({
+        username: "testuser",
+        email: "test@test.com",
+        password: "hashedpassword123",
+      });
+
+      const response = await request(app)
+        .get("/users/testuser");
+
+      expect(response.statusCode).toBe(200);
+
+      expect(response.body).toHaveProperty("user");
+      expect(response.body.user.username).toBe("testuser");
+      expect(response.body.user.email).toBe("test@test.com");
+    });
+
+
+    test("password isn't returned with user information", async () => {
+      await User.create({
+        username: "testuser",
+        email: "test@test.com",
+        password: "hashedpassword123",
+      });
+
+      const response = await request(app)
+        .get("/users/testuser");
+
+      expect(response.statusCode).toBe(200);
+      expect(response.body.user.password).toBeUndefined();
+    });
+
+
+    test("returns 404 if user does not exist", async () => {
+      const response = await request(app)
+        .get("/users/nonexistentuser");
+
+      expect(response.statusCode).toBe(404);
+    });
+
+  });
+});
