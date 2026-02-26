@@ -40,10 +40,41 @@ async function addToWatchlist(req, res) {
   }
 }
 
+async function removeFromWatchlist(req, res) {
+  try {
+    const movie_id = req.params.movieId;
+    const user_id = req.user_id;
+
+    const deleted = await MoviesToWatch.findOneAndDelete({
+      user_id,
+      movie_id,
+    });
+
+    if (!deleted) {
+      const newToken = generateToken(user_id);
+      return res.status(404).json({
+        message: "Movie not in watchlist",
+        token: newToken,
+      });
+    }
+
+    const newToken = generateToken(user_id);
+    res.status(200).json({
+      message: "Movie removed from watchlist",
+      token: newToken,
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+}
+
 const MoviesToWatchController = {
   getAllPosts: getAllPosts,
   createPost: createPost,
   addToWatchlist: addToWatchlist,
+  removeFromWatchlist: removeFromWatchlist,
 };
 
 module.exports = MoviesToWatchController;
