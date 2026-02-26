@@ -1,0 +1,37 @@
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
+export async function getUser(username,token) {
+    const requestOptions = {
+        method: "GET",
+        headers: {
+        Authorization: `Bearer ${token}`,
+    },
+    };
+
+    const response = await fetch(`${BACKEND_URL}/users/${username}`, requestOptions);
+
+    if (response.status !== 200) {
+        throw new Error("Unable to get user data");
+    }
+
+    const data = await response.json();
+    return data;
+    }
+
+export async function getAllUsers(token) {
+    const requestOptions = {
+        method: "GET",
+        headers: {
+        Authorization: `Bearer ${token}`,
+        },
+    };
+
+    const response = await fetch(`${BACKEND_URL}/users/all`, requestOptions);
+
+    if (response.status !== 200) {
+        throw new Error("Unable to get users");
+    }
+
+    const data = await response.json();
+    return data;
+    }
