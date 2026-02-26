@@ -108,7 +108,6 @@ async function getUserByUsername(req,res) {
   try {
     const username = req.params.username
     const user = await User.findOne({username:username}).select("-password")
-    console.log(user)
 
     if (!user){
       return res.status(404).json({message:"User doesn't exist. Unable to get user information"})

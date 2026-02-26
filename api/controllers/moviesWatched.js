@@ -20,9 +20,10 @@ else if (req.user_id){
 else{
   return res.status(400).json({message:"No user defined"})
 }
-
-  const movies = await MoviesWatched.find({user_id:userId});
-  return res.status(200).json({message:"Successfully got movies",movies:movies})
+  const movies = await MoviesWatched.find({user_id:userId}).populate("movie_id");
+  console.log(movies)
+  const newToken = generateToken(req.user_id);
+  return res.status(200).json({message:"Successfully got movies",movies:movies,token:newToken})
   }
   catch(error){
     return res.status(500).json({message: "Server error"})

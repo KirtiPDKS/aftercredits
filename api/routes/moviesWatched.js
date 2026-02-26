@@ -3,7 +3,7 @@ const router = express.Router();
 
 const moviesWatchedController = require('../controllers/moviesWatched')
 
-router.get("/", moviesWatchedController.getWatchedMovies);
+router.get("/:username", moviesWatchedController.getWatchedMovies);
 router.post("/", moviesWatchedController.createPost);
 router.post("/:movieId", moviesWatchedController.markAsWatched);
 
