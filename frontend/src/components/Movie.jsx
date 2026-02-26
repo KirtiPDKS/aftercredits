@@ -15,7 +15,7 @@ function Movies(props) {
         <div className="d-flex justify-content-around align-items-start mb-2">
           <h5 className="card-title mb-0">{movie.title}</h5>
           <span className="badge bg-secondary">
-            {movie.release_year}
+            {movie.releaseYear}
           </span>
         </div>
 
