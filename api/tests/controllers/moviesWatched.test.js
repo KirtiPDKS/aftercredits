@@ -173,4 +173,51 @@ describe("/moviesWatched", () => {
   });
 });
 
+// --- DELETE routes---
 
+describe("DELETE, when a valid token is present", () => {
+  test("removes a moviesWatched entry", async () => {
+    const entry = await new MoviesWatched({
+      user_id: userId,
+      movie_id: movieId,
+    }).save();
+
+    const response = await request(app)
+      .delete(`/moviesWatched/${movieId}`)
+      .set("Authorization", `Bearer ${token}`);
+
+    expect(response.status).toEqual(200);
+
+    const entries = await MoviesWatched.find();
+    expect(entries.length).toEqual(0);
+  });
+
+  test("returns a new token", async () => {
+    const entry = await new MoviesWatched({
+      user_id: userId,
+      movie_id: movieId,
+    }).save();
+
+    const response = await request(app)
+      .delete(`/moviesWatched/${movieId}`)
+      .set("Authorization", `Bearer ${token}`);
+
+    const newTokenDecoded = JWT.decode(response.body.token, secret);
+    const oldTokenDecoded = JWT.decode(token, secret);
+    expect(newTokenDecoded.iat > oldTokenDecoded.iat).toEqual(true);
+  });
+});
+
+describe("DELETE, when token is missing", () => {
+  test("responds with 401", async () => {
+    const entry = await new MoviesWatched({
+      user_id: userId,
+      movie_id: movieId,
+    }).save();
+
+    const response = await request(app)
+      .delete(`/moviesWatched/${movieId}`);
+
+    expect(response.status).toEqual(401);
+  });
+});
