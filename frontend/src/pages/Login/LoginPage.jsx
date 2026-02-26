@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { useOutletContext } from "react-router-dom";
 import { login } from "../../services/authentication";
 
 export function LoginPage() {
@@ -8,12 +8,16 @@ export function LoginPage() {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const [error, setError] = useState(null);
+  const { setLoggedIn } = useOutletContext();
 
   async function handleSubmit(event) {
     event.preventDefault();
     try {
       const token = await login(user, password);
       localStorage.setItem("token", token);
+
+      setLoggedIn(true);
+      
       navigate("/movies");
     } catch (err) {
       console.error(err);
