@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { Link } from "react-router-dom";
 import { getMovies } from "../../services/movies";
 import LogoutButton from "../../components/LogoutButton";
 import Movies from "../../components/Movie";
@@ -41,11 +41,10 @@ export function FeedPage() {
       <div className="container row" >
         {movies.map((movie) => (
           <div className="col-12 col-sm-6 col-md-4 col-lg-3 mb-4"
-          key={movie._id}
-          onClick={() => { setSelectedMovie(movie); setShowModal(true); }}
-          style={{ cursor: "pointer" }}
-          > 
-          <Movies movie={movie} />
+          key={movie._id}> 
+            <Link to={`/movies/${movie._id}`} className="text-decoration-none text-dark">
+              <Movies movie={movie} />
+            </Link>
           </div> 
         ))}
       </div>
