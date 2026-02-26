@@ -26,12 +26,12 @@ export function LoginPage() {
     }
   }
   return (
-    <div className="container py-5 SignupLogin">
+    <div className="SignupLogin">
       <div className="row justify-content-center">
-        <div className="col-md-6">
+        <div className="col-md-5">
 
           <div className="card bg-black border-black shadow-sm p-4">
-            <h2 className="mb-2 text-center text-warning Title">AfterCredits</h2>
+            <h1 className="mb-2 text-center text-warning Title">AfterCredits</h1>
             <p className="mb-4 text-center">Login to your account:</p>
 
             <form onSubmit={handleSubmit}>
