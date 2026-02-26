@@ -104,12 +104,31 @@ async function getAllUsers(req, res) {
   }
 } 
 
+async function getUserByUsername(req,res) {
+  try {
+    const username = req.params.username
+    const user = await User.findOne({username:username}).select("-password")
+    console.log(user)
+
+    if (!user){
+      return res.status(404).json({message:"User doesn't exist. Unable to get user information"})
+    }
+    return res.status(200).json({message:"Succesfully got user",user:user})
+  }
+
+  catch(err){
+    console.error(err)
+    return res.status(500).json({message:"Server error"})
+  }
+}
+
 const UsersController = {
   create: create,
   getCurrentUser: getCurrentUser,
   updateCurrentUser: updateCurrentUser,
   updateCurrentUserPassword: updateCurrentUserPassword,
   getAllUsers:getAllUsers,
+  getUserByUsername:getUserByUsername,
 };
 
 module.exports = UsersController;
