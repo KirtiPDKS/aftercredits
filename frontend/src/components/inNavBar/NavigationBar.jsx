@@ -19,6 +19,7 @@ const NavigationBar = ({loggedIn,setLoggedIn}) => {
 
         {/* Right side buttons */}
         <div className="d-flex align-items-center gap-3">
+          {loggedIn && <Link className="nav-link" to="/users/all">All Users</Link>}
           {loggedIn && <Link className="nav-link" to="/">Your Profile</Link>}
           {loggedIn && <Link className="nav-link" to="/account">Account Settings</Link>}
           {loggedIn && <LogoutButton onLogout={handleLogout} />}

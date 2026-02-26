@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { getAllUsers } from "../../services/users";
+import User from "../../components/Users/User";
 
 const AllUsersPage = () => {
 
@@ -15,7 +16,7 @@ const AllUsersPage = () => {
         }
 
         getAllUsers(token).then((data)=> {
-            setUsers(data.users)
+            setUsers(data)
         }).catch((err)=>{
             console.error(err)
         })
@@ -27,7 +28,7 @@ const AllUsersPage = () => {
         <p>List of all the users on the platform</p>
         <ul>
         {users.map((user) => (
-            <li key={user.id}>{user.username}</li>
+        <User key={user._id} user={user}/>
         ))}
         </ul>
     </>
