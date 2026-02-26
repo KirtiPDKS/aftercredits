@@ -1,6 +1,7 @@
 const User = require("../models/user");
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
+const { generateToken } = require("../lib/token");
 
 async function create(req, res) {
 
@@ -48,8 +49,9 @@ async function getCurrentUser(req, res) {
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
+    // const newToken = generateToken(req.user_id);
 
-    res.status(200).json(user);
+    res.status(200).json({user:user});
   } catch (err) {
     res.status(500).json({ message: "Server error" });
   }
@@ -96,7 +98,6 @@ async function updateCurrentUserPassword(req, res) {
 async function getAllUsers(req, res) {
   try {
     const users = await User.find({})
-    console.log(users)
     return res.status(200).json(users)
     
   } catch (error) {

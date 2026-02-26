@@ -35,3 +35,21 @@ export async function getAllUsers(token) {
     const data = await response.json();
     return data;
     }
+
+export async function getCurrentUser(token) {
+    const requestOptions = {
+        method: "GET",
+        headers: {
+        Authorization: `Bearer ${token}`,
+        },
+    };
+
+    const response = await fetch(`${BACKEND_URL}/users/me`, requestOptions);
+
+    if (response.status !== 200) {
+        throw new Error("Unable to get user");
+    }
+
+    const data = await response.json();
+    return data;
+    }

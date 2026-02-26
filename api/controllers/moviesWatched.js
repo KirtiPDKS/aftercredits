@@ -14,19 +14,25 @@ async function getWatchedMovies(req, res) {
   }
   userId = user._id;
 }
-else if (req.user_id){
-  userId = req.user_id
-}
 else{
   return res.status(400).json({message:"No user defined"})
 }
   const movies = await MoviesWatched.find({user_id:userId}).populate("movie_id");
-  console.log(movies)
-  const newToken = generateToken(req.user_id);
-  return res.status(200).json({message:"Successfully got movies",movies:movies,token:newToken})
+  return res.status(200).json({message:"Successfully got movies",movies:movies})
   }
   catch(error){
     return res.status(500).json({message: "Server error"})
+  }
+  
+}
+
+async function getMyWatchedMovies(req, res) {
+  try{
+  const movies = await MoviesWatched.find({user_id:req.user_id}).populate("movie_id");
+  return res.status(200).json({message:"Successfully got movies",movies:movies})
+  }
+  catch(error){
+    return res.status(500).json({message: "Unable to get movies"})
   }
   
 }
@@ -71,6 +77,7 @@ const moviesWatchedController = {
   getWatchedMovies: getWatchedMovies,
   createPost: createPost,
   markAsWatched: markAsWatched,
+  getMyWatchedMovies:getMyWatchedMovies,
 };
 
 module.exports = moviesWatchedController;

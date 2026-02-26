@@ -26,7 +26,26 @@ export async function getUserWatchedMovies(username, token) {
     },
   };
 
-  const response = await fetch(`${BACKEND_URL}/moviesWatched/${username}`, requestOptions);
+  const response = await fetch(`${BACKEND_URL}/moviesWatched/name/${username}`, requestOptions);
+
+  if (response.status !== 200) {
+    throw new Error("Unable to fetch movies");
+  }
+
+  const data = await response.json();
+  return data;
+}
+
+export async function getMyWatchedMovies(token) {
+
+  const requestOptions = {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const response = await fetch(`${BACKEND_URL}/moviesWatched/me`, requestOptions);
 
   if (response.status !== 200) {
     throw new Error("Unable to fetch movies");
