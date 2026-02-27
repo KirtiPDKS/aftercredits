@@ -40,7 +40,7 @@ export function BrowsingPage() {
     if(genre === ""){
       return (Number(year[0]) <= movie.releaseYear && movie.releaseYear <= Number(year[1])) && (movie.title.toLowerCase().includes(search.toLowerCase()) || movie.director.toLowerCase().includes(search.toLowerCase()))
     } else{
-      return movie.genre.toLowerCase().includes(genre.toLowerCase()) && (Number(year[0]) <= movie.releaseYear && movie.releaseYear <= Number(year[1])) && (movie.title.toLowerCase().includes(search.toLowerCase()) || movie.director.toLowerCase().includes(search.toLowerCase()))
+      return (movie.genre.toLowerCase().includes(genre.toLowerCase())) && (Number(year[0]) <= movie.releaseYear && movie.releaseYear <= Number(year[1])) && (movie.title.toLowerCase().includes(search.toLowerCase()) || movie.director.toLowerCase().includes(search.toLowerCase()))
     }
   }
     );
@@ -68,7 +68,7 @@ export function BrowsingPage() {
             />
         </div>
         <div className="d-inline-flex p-2">
-        <select name="genre" className="form-select w-25 m-2" aria-label="Default select example" onChange={(e) => setGenre(Array(e.target.value))}>
+        <select name="genre" className="form-select w-25 m-2" aria-label="Default select example" onChange={(e) => setGenre(e.target.value)}>
           <option selected disabled hidden>Genre</option>
           <option value="">All</option>
           <option value="Drama">Drama</option>
@@ -83,6 +83,7 @@ export function BrowsingPage() {
           <option value="Psychological">Psychological</option>
           <option value="Indie">Indie</option>
           <option value="Adventure">Adventure</option>
+          <option value="Comedy">Comedy</option>
         </select>
         <select name="year" className="form-select w-25  m-2" aria-label="Default select example" onChange={(e) => setYear(e.target.value.split(','))}>
           <option selected disabled hidden>Year</option>
