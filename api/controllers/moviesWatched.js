@@ -73,11 +73,42 @@ async function markAsWatched(req, res) {
   }
 }
 
+async function removeFromWatched(req, res) {
+  try {
+    const movie_id = req.params.movieId;
+    const user_id = req.user_id;
+
+    const deleted = await MoviesWatched.findOneAndDelete({
+      user_id,
+      movie_id,
+    });
+
+    if (!deleted) {
+      const newToken = generateToken(user_id);
+      return res.status(404).json({
+        message: "Movie not in watched list",
+        token: newToken,
+      });
+    }
+
+    const newToken = generateToken(user_id);
+    res.status(200).json({
+      message: "Movie removed from watched list",
+      token: newToken,
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+}
+
 const moviesWatchedController = {
   getWatchedMovies: getWatchedMovies,
   createPost: createPost,
   markAsWatched: markAsWatched,
   getMyWatchedMovies:getMyWatchedMovies,
+  removeFromWatched: removeFromWatched,
 };
 
 module.exports = moviesWatchedController;

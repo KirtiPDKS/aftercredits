@@ -52,16 +52,7 @@ describe("FeedPage", () => {
   test("displays movies from backend", async () => {
     window.localStorage.setItem("token", "testToken");
 
-    const mockMovies = [
-      {
-        _id: "12345",
-        title: "Test Movie",
-        genre: "Comedy",
-        release_year: 2000,
-        description: "This is a test film",
-        image: "",
-      },
-    ];
+    const mockMovies = [{ _id: "12345", title: "Test Movie", genre: "Comedy", releaseYear:2000,description:"This is a test film", image:"" }];
 
     getMovies.mockResolvedValue({
       movies: mockMovies,
