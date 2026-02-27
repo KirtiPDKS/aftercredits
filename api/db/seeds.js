@@ -5,10 +5,11 @@ const Movie = require("../models/movies");
 const movies = [
   {
     title: "Inception",
-    genre: "Science Fiction",
+    genre: "Sci-Fi",
     releaseYear: 2010,
     description:
       "Inception is a science-fiction thriller directed by Christopher Nolan starring Leonardo DiCaprio as Dom Cobb, a skilled thief who steals secrets from within dreams. He is offered a chance at redemption if he can successfully perform inception — planting an idea into someone's subconscious. The film is known for its layered dream worlds and practical effects.",
+    director: "Christopher Nolan",
     image: "https://www.tallengestore.com/cdn/shop/products/Inception-LeonardoDiCaprio-ChristopherNolan-HollywoodSciFiMoviePoster_66029b94-50ae-494c-b11d-60a3d91268b5.jpg?v=1685582036",
   },
   {

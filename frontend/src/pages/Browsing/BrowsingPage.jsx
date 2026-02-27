@@ -36,9 +36,9 @@ export function BrowsingPage() {
   const filteredMovies = movies.filter(
   (movie) => {
     if(genre === ""){
-      return year <= movie.releaseYear
+      return year <= movie.releaseYear && (movie.title.toLowerCase().includes(search.toLowerCase()) || movie.director.toLowerCase().includes(search.toLowerCase()))
     } else{
-      return (movie.genre.toLowerCase()).includes(genre.toLowerCase()) && year <= movie.releaseYear
+      return movie.genre.toLowerCase().includes(genre.toLowerCase()) && year <= movie.releaseYear && (movie.title.toLowerCase().includes(search.toLowerCase()) || movie.director.toLowerCase().includes(search.toLowerCase()))
     }
   }
     );
@@ -62,6 +62,7 @@ export function BrowsingPage() {
             onChange={(e) => setSearch(e.target.value)}
             className="form-control"
             aria-label="Search"
+            placeholder="Search by Title or Director"
             />
         </div>
         <div className="d-inline-flex p-2">
@@ -88,7 +89,7 @@ export function BrowsingPage() {
           <option value={2026-20}>last 20 Years</option>
           <option value={2026-30}>last 30 Years</option>
         </select>
-        <button class="btn btn-warning m-2">Clear Filter</button>
+        <button class="btn btn-warning m-2">Clear Filters</button>
         </div>
       </form>
       <div className="container row" id="scroll">
