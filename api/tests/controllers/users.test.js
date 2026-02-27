@@ -1,10 +1,27 @@
 const request = require("supertest");
+const JWT = require("jsonwebtoken")
 
 const app = require("../../app");
 const User = require("../../models/user");
 
 require("../mongodb_helper");
 
+const secret = process.env.JWT_SECRET;
+
+function createToken(userId) {
+  return JWT.sign(
+    {
+      sub: userId,
+      // Backdate this token of 5 minutes
+      iat: Math.floor(Date.now() / 1000) - 5 * 60,
+      // Set the JWT token to expire in 10 minutes
+      exp: Math.floor(Date.now() / 1000) + 10 * 60,
+    },
+    secret
+  );
+}
+
+let token;
 describe("/users", () => {
   beforeEach(async () => {
     await User.deleteMany({});
@@ -149,5 +166,86 @@ describe("/users", () => {
       expect(users.length).toBe(1);
     });
 
+    test("returns all users GET /users/all", async () => {
+    await User.create({
+      email: "user1@email.com",
+      username: "user1",
+      password: "ValidPassword1"
+    });
+
+    await User.create({
+      email: "user2@email.com",
+      username: "user2",
+      password: "ValidPassword1"
+    });
+
+    const response = await request(app)
+      .get("/users/all");
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body.length).toBe(2);
+  });
 
   });
+
+//Separated out the tests that need tokens and ones that don't
+describe("/users (tests that need tokens) ", () => {
+  beforeEach(async () => {
+    await User.deleteMany({});
+
+    const user = await User.create({
+      email: "current@test.com",
+      username: "testuser",
+      password: "12345678",
+    });
+
+    await User.create({
+      email: "profile@test.com",
+      username: "profileuser",
+      password: "12345678",
+    });
+
+    token = createToken(user.id);
+});
+    test("GET /users/me (getting current users) returns the current user without password", async () => {
+    const response = await request(app)
+      .get("/users/me")
+      .set("Authorization", `Bearer ${token}`);
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body.user.email).toBe("current@test.com");
+    expect(response.body.user.username).toBe("testuser");
+    expect(response.body.user.password).toBeUndefined();
+  });
+
+  test("returns 404 for /GET /users/me if user doesn't exist", async () => {
+    await User.deleteMany({}); // remove the user
+
+    const response = await request(app)
+      .get("/users/me")
+      .set("Authorization", `Bearer ${token}`);
+
+    expect(response.statusCode).toBe(404);
+    expect(response.body.message).toBe("User not found");
+  });
+
+  test("returns a user by username without password", async () => {
+    const response = await request(app)
+      .get("/users/profileuser")
+      .set("Authorization", `Bearer ${token}`);
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body.user.username).toBe("profileuser");
+    expect(response.body.user.password).toBeUndefined();
+  });
+
+  test("returns 404 if username does not exist", async () => {
+    const response = await request(app)
+      .get("/users/nonexistent")
+      .set("Authorization", `Bearer ${token}`);
+
+    expect(response.statusCode).toBe(404);
+    expect(response.body.message).toBe("User doesn't exist. Unable to get user information");
+  });
+
+});
