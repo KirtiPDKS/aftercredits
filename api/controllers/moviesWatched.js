@@ -38,14 +38,38 @@ async function getMyWatchedMovies(req, res) {
 }
 
 async function createPost(req, res) {
-    const movie = new MoviesWatched({
-      ...req.body, //unpacks everything that arrives from the JSON stringify on front-end
-      user_id: req.user_id, 
-    });
-  await movie.save();
+  try {
+    const { movie_id } = req.body;
 
-  const newToken = generateToken(req.user_id);
-  res.status(201).json({ message: "Movie added to watched list", token: newToken });
+    const existing = await MoviesWatched.findOne({
+      user_id: req.user_id,
+      movie_id,
+    });
+
+    if (existing) {
+      const newToken = generateToken(req.user_id);
+      return res.status(409).json({
+        message: "Movie already in watched list",
+        token: newToken,
+      });
+    }
+
+    const movie = new MoviesWatched({
+      user_id: req.user_id,
+      movie_id,
+    });
+
+    await movie.save();
+
+    const newToken = generateToken(req.user_id);
+    res.status(201).json({
+      message: "Movie added to watched list",
+      token: newToken,
+    });
+
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
 }
 
 async function markAsWatched(req, res) {
@@ -53,6 +77,20 @@ async function markAsWatched(req, res) {
     const movie_id = req.params.movieId;
     const user_id = req.user_id;
 
+    const alreadyWatched = await MoviesWatched.findOne({
+      user_id,
+      movie_id,
+    });
+
+    if (alreadyWatched) {
+      const newToken = generateToken(user_id);
+      return res.status(409).json({
+        message: "Movie already marked as watched",
+        token: newToken,
+      });
+    }
+
+    // Remove from to-watch if exists
     await MoviesToWatch.findOneAndDelete({
       user_id,
       movie_id,
@@ -66,7 +104,10 @@ async function markAsWatched(req, res) {
     await watchedMovie.save();
 
     const newToken = generateToken(user_id);
-    res.status(200).json({ message: "Marked as watched", token: newToken });
+    res.status(200).json({
+      message: "Marked as watched",
+      token: newToken,
+    });
 
   } catch (error) {
     res.status(400).json({ message: "Error marking as watched" });

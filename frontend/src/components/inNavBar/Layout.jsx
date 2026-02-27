@@ -8,18 +8,18 @@ const Layout = () => {
 
   // Listen for changes to localStorage from other tabs
   return (
-<>
-  {loggedIn && (
-    <NavigationBar 
-      loggedIn={loggedIn} 
-      setLoggedIn={setLoggedIn} 
-    />
-  )}
-
-  <main className="container py-4">
-    <Outlet context={{ setLoggedIn }} />
-  </main>
-</>
+    <>
+      {loggedIn && (
+        <NavigationBar 
+          loggedIn={loggedIn} 
+          setLoggedIn={setLoggedIn} 
+        />
+      )}
+    
+      <main className="container py-4">
+        <Outlet context={{ setLoggedIn }} />
+      </main>
+    </>
   );
 };
 

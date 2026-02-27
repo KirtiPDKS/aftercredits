@@ -35,14 +35,19 @@ export function MovieDetailsPage() {
         setInWatchlist(isInWatchlist);
 
         // Check watched list
-        const watchedRes = await fetch(`${BACKEND_URL}/moviesWatched`, {
+        const watchedRes = await fetch(`${BACKEND_URL}/moviesWatched/me`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const watchedData = await watchedRes.json();
-        const isWatched = watchedData.movies.some(
-          (entry) => entry.movie_id === id
-        );
-        setWatched(isWatched);
+        const isWatched =
+          watchedData.movies?.some(
+            (entry) =>
+              entry.movie_id &&
+              entry.movie_id._id &&
+              entry.movie_id._id.toString() === id.toString()
+          ) || false;
+
+setWatched(isWatched);
       } catch (err) {
         console.error(err);
       }
