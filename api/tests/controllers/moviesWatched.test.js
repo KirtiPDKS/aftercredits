@@ -5,6 +5,7 @@ const app = require("../../app");
 const User = require("../../models/user");
 const Movie = require("../../models/movies");
 const MoviesWatched = require("../../models/moviesWatched");
+const MoviesToWatch = require("../../models/moviesToWatch");
 
 require("../mongodb_helper");
 
@@ -22,7 +23,7 @@ function createToken(userId) {
 }
 
 let token;
-let userId; 
+let userId;
 let movieId;
 
 describe("/moviesWatched", () => {
@@ -44,6 +45,7 @@ describe("/moviesWatched", () => {
 
   afterEach(async () => {
     await MoviesWatched.deleteMany({});
+    await MoviesToWatch.deleteMany({});
   });
 
   afterAll(async () => {
@@ -51,128 +53,153 @@ describe("/moviesWatched", () => {
     await Movie.deleteMany({});
   });
 
-  // --- POST routes---
+  // =========================
+  // POST /moviesWatched
+  // =========================
 
-  describe("POST, when a valid token is present", () => {
-    test("responds with 201", async () => {
+  describe("POST /moviesWatched", () => {
+    test("responds with 201 when token is valid", async () => {
       const response = await request(app)
         .post("/moviesWatched")
         .set("Authorization", `Bearer ${token}`)
-        .send({ user_id: userId, movie_id: movieId });
+        .send({ movie_id: movieId });
 
       expect(response.status).toEqual(201);
     });
 
-    test("creates a new moviesWatched entry", async () => {
+    test("creates a new watched movie", async () => {
       await request(app)
         .post("/moviesWatched")
         .set("Authorization", `Bearer ${token}`)
-        .send({ user_id: userId, movie_id: movieId });
+        .send({ movie_id: movieId });
 
       const entries = await MoviesWatched.find();
       expect(entries.length).toEqual(1);
       expect(entries[0].movie_id.toString()).toEqual(movieId.toString());
+      expect(entries[0].user_id.toString()).toEqual(userId.toString());
     });
 
     test("returns a new token", async () => {
       const response = await request(app)
         .post("/moviesWatched")
         .set("Authorization", `Bearer ${token}`)
-        .send({ user_id: userId, movie_id: movieId });
+        .send({ movie_id: movieId });
 
-      const newTokenDecoded = JWT.decode(response.body.token, secret);
-      const oldTokenDecoded = JWT.decode(token, secret);
+      const newTokenDecoded = JWT.decode(response.body.token);
+      const oldTokenDecoded = JWT.decode(token);
+
       expect(newTokenDecoded.iat > oldTokenDecoded.iat).toEqual(true);
     });
 
-    test("can save with a review and rating", async () => {
-      await request(app)
-      .post("/moviesWatched")
-      .set("Authorization", `Bearer ${token}`)
-      .send({ user_id: userId, movie_id: movieId, review: "Was poor.", rating: 2 });
-
-      const entries = await MoviesWatched.find();
-      expect(entries[0].review).toEqual("Was poor.");
-      expect(entries[0].rating).toEqual(2);
-    });
-
-   test("can save without a review or rating", async () => {
-    await request(app)
-    .post("/moviesWatched")
-    .set("Authorization", `Bearer ${token}`)
-    .send({ user_id: userId, movie_id: movieId });
-
-    const entries = await MoviesWatched.find();
-    expect(entries.length).toEqual(1);  
-  });
-
-});
-
-  describe("POST, when token is missing", () => {
-    test("responds with 401", async () => {
+    test("responds with 401 if token missing", async () => {
       const response = await request(app)
         .post("/moviesWatched")
-        .send({ user_id: userId, movie_id: movieId });
+        .send({ movie_id: movieId });
 
       expect(response.status).toEqual(401);
     });
-
-    test("does not create an entry", async () => {
-      await request(app)
-        .post("/moviesWatched")
-        .send({ user_id: userId, movie_id: movieId });
-
-      const entries = await MoviesWatched.find();
-      expect(entries.length).toEqual(0);
-    });
   });
 
-  // --- GET routes---
+  // =========================
+  // POST /moviesWatched/:movieId
+  // =========================
 
-  describe("GET, when a valid token is present", () => {
-    test("responds with 200", async () => {
+  describe("POST /moviesWatched/:movieId (markAsWatched)", () => {
+    test("moves movie from to-watch to watched", async () => {
+      await MoviesToWatch.create({
+        user_id: userId,
+        movie_id: movieId,
+      });
+
       const response = await request(app)
-        .get("/moviesWatched")
+        .post(`/moviesWatched/${movieId}`)
         .set("Authorization", `Bearer ${token}`);
 
       expect(response.status).toEqual(200);
+
+      const toWatchEntries = await MoviesToWatch.find();
+      const watchedEntries = await MoviesWatched.find();
+
+      expect(toWatchEntries.length).toEqual(0);
+      expect(watchedEntries.length).toEqual(1);
     });
 
-    test("returns all moviesWatched entries", async () => {
-      await new MoviesWatched({ user_id: userId, movie_id: movieId }).save();
-
+    test("returns new token", async () => {
       const response = await request(app)
-        .get("/moviesWatched")
+        .post(`/moviesWatched/${movieId}`)
         .set("Authorization", `Bearer ${token}`);
 
-      expect(response.body.movies.length).toEqual(1);
-      expect(response.body.movies[0].movie_id.toString()).toEqual(movieId.toString());
-    });
+      const newTokenDecoded = JWT.decode(response.body.token);
+      const oldTokenDecoded = JWT.decode(token);
 
-    test("returns a new token", async () => {
-      const response = await request(app)
-        .get("/moviesWatched")
-        .set("Authorization", `Bearer ${token}`);
-
-      const newTokenDecoded = JWT.decode(response.body.token, secret);
-      const oldTokenDecoded = JWT.decode(token, secret);
       expect(newTokenDecoded.iat > oldTokenDecoded.iat).toEqual(true);
     });
-  });
 
-  describe("GET, when token is missing", () => {
-    test("responds with 401", async () => {
-      const response = await request(app).get("/moviesWatched");
+    test("responds with 401 if token missing", async () => {
+      const response = await request(app)
+        .post(`/moviesWatched/${movieId}`);
+
       expect(response.status).toEqual(401);
     });
+  });
 
-    test("returns no movies", async () => {
-      const response = await request(app).get("/moviesWatched");
-      expect(response.body.movies).toEqual(undefined);
+  // =========================
+  // GET /moviesWatched/me
+  // =========================
+
+  describe("GET /moviesWatched/me", () => {
+    test("returns watched movies for logged in user", async () => {
+      await MoviesWatched.create({
+        user_id: userId,
+        movie_id: movieId,
+      });
+
+      const response = await request(app)
+        .get("/moviesWatched/me")
+        .set("Authorization", `Bearer ${token}`);
+
+      expect(response.status).toEqual(200);
+      expect(response.body.movies.length).toEqual(1);
+    });
+
+    test("responds with 401 if token missing", async () => {
+      const response = await request(app).get("/moviesWatched/me");
+      expect(response.status).toEqual(401);
     });
   });
-});
 
+  // =========================
+  // GET /moviesWatched/name/:username
+  // =========================
+
+describe("GET /moviesWatched/name/:username", () => {
+  test("returns watched movies by username when logged in", async () => {
+    await MoviesWatched.create({
+      user_id: userId,
+      movie_id: movieId,
+    });
+
+    const response = await request(app)
+      .get("/moviesWatched/name/movie-addict")
+      .set("Authorization", `Bearer ${token}`);
+
+    expect(response.status).toEqual(200);
+    expect(response.body.movies.length).toEqual(1);
+  });
+
+
+  test("responds with 404 if user not found", async () => {
+    const response = await request(app)
+      .get("/moviesWatched/name/unknown-user")
+      .set("Authorization", `Bearer ${token}`);
+
+    expect(response.status).toEqual(404);
+  });
+
+  test("responds with 401 if token missing", async () => {
+    const response = await request(app)
+      .get("/moviesWatched/name/movie-addict");
+    
 // --- DELETE routes---
 
 describe("DELETE, when a valid token is present", () => {
@@ -220,4 +247,5 @@ describe("DELETE, when token is missing", () => {
 
     expect(response.status).toEqual(401);
   });
+});
 });

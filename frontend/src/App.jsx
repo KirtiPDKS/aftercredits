@@ -8,6 +8,9 @@ import { SignupPage } from "./pages/Signup/SignupPage";
 import { FeedPage } from "./pages/Feed/FeedPage";
 import { BrowsingPage } from "./pages/Browsing/BrowsingPage"
 import { MovieDetailsPage } from "./pages/MovieDetailsPage";
+import AllUsersPage from "./pages/Users/AllUsersPage";
+import { GenericProfilePage } from "./pages/Users/GenericProfilePage";
+import { YourProfilePage } from "./pages/Users/YourProfilePage";
 
 // docs: https://reactrouter.com/en/main/start/overview
 const router = createBrowserRouter([
@@ -37,6 +40,18 @@ const router = createBrowserRouter([
     path: "/movies/:id",
     element: <MovieDetailsPage />,
   },
+  {
+    path:"/users/all",
+    element:<AllUsersPage/>
+  },
+  {
+    path:"/users/:username",
+    element:<GenericProfilePage/>
+  },
+  {
+    path:"/users/myprofile",
+    element:<YourProfilePage/>
+  }
   ],
   },
 ]);

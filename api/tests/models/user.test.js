@@ -54,4 +54,19 @@ describe("User model", () => {
     expect(users[0].username).toEqual("someone");
   });
 
+  it("adds createdAt and updatedAt timestamps", async () => {
+  const user = new User({
+    email: "someone@example.com",
+    username: "someone",
+    password: "ValidPassword1",
+  });
+
+  await user.save();
+
+  expect(user.createdAt).toBeDefined();
+  expect(user.updatedAt).toBeDefined();
+  expect(user.createdAt).toBeInstanceOf(Date);
+  expect(user.updatedAt).toBeInstanceOf(Date);
+});
+
 });
