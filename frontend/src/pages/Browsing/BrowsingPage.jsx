@@ -8,13 +8,15 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import { Link } from "react-router-dom";
 
+const currentYear = new Date().getFullYear()
+
 export function BrowsingPage() {
   const [movies, setMovies] = useState([]);
   const [selectedMovie, setSelectedMovie] = useState(null) //starting state is null, no movies selected
   const [showModal, setShowModal] = useState(false); // comments card popout hidden to start with
   const [search, setSearch] = useState("");
   const [genre, setGenre] = useState("");
-  const [year, setYear] = useState(null);
+  const [year, setYear] = useState([0, currentYear]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -36,9 +38,9 @@ export function BrowsingPage() {
   const filteredMovies = movies.filter(
   (movie) => {
     if(genre === ""){
-      return year <= movie.releaseYear && (movie.title.toLowerCase().includes(search.toLowerCase()) || movie.director.toLowerCase().includes(search.toLowerCase()))
+      return (Number(year[0]) <= movie.releaseYear && movie.releaseYear <= Number(year[1])) && (movie.title.toLowerCase().includes(search.toLowerCase()) || movie.director.toLowerCase().includes(search.toLowerCase()))
     } else{
-      return movie.genre.toLowerCase().includes(genre.toLowerCase()) && year <= movie.releaseYear && (movie.title.toLowerCase().includes(search.toLowerCase()) || movie.director.toLowerCase().includes(search.toLowerCase()))
+      return (movie.genre.toLowerCase().includes(genre.toLowerCase())) && (Number(year[0]) <= movie.releaseYear && movie.releaseYear <= Number(year[1])) && (movie.title.toLowerCase().includes(search.toLowerCase()) || movie.director.toLowerCase().includes(search.toLowerCase()))
     }
   }
     );
@@ -81,13 +83,17 @@ export function BrowsingPage() {
           <option value="Psychological">Psychological</option>
           <option value="Indie">Indie</option>
           <option value="Adventure">Adventure</option>
+          <option value="Comedy">Comedy</option>
         </select>
-        <select name="year" className="form-select w-25  m-2" aria-label="Default select example" onChange={(e) => setYear(e.target.value)}>
+        <select name="year" className="form-select w-25  m-2" aria-label="Default select example" onChange={(e) => setYear(e.target.value.split(','))}>
           <option selected disabled hidden>Year</option>
-          <option value={0}>All time</option>
-          <option value={2026-10}>last 10 Years</option>
-          <option value={2026-20}>last 20 Years</option>
-          <option value={2026-30}>last 30 Years</option>
+          <option value={[0,currentYear]}>All time</option>
+          <option value={[2020,currentYear]}>2020 - {currentYear}</option>
+          <option value={[2010,2019]}>2010 - 2019</option>
+          <option value={[2000,2009]}>2000 - 2009</option>
+          <option value={[1990,1999]}>1990 - 1999</option>
+          <option value={[1980,1989]}>1980 - 1989</option>
+          <option value={[1970,1979]}>1970 - 1979</option>
         </select>
         <button class="btn btn-warning m-2">Clear Filters</button>
         </div>
