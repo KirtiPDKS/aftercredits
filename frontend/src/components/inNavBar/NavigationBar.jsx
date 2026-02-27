@@ -13,9 +13,7 @@ const NavigationBar = ({loggedIn,setLoggedIn}) => {
       <div className="container-fluid d-flex justify-content-between align-items-center">
 
         {/* Logo */}
-        <a className="navbar-brand" href="/">
           <Logo loggedIn={loggedIn} />
-        </a>
 
         {/* Right side buttons */}
         <div className="d-flex align-items-center gap-3">
