@@ -7,7 +7,7 @@ const Logo = ({loggedIn}) => {
   return (
     <Link
       to={pageRef}
-      className="navbar-brand fw-bold fs-3 text-decoration-none text-warning"
+      className="navbar-brand fw-bold fs-3 text-decoration-none text-warning Title"
     >
       Aftercredits
     </Link>
