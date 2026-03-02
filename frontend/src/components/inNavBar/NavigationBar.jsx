@@ -20,7 +20,7 @@ const NavigationBar = ({loggedIn,setLoggedIn}) => {
           {loggedIn && <Link className="nav-link" to="/users/all">All Users</Link>}
           {loggedIn && <Link className="nav-link" to="/browse">Browse</Link>}
           {loggedIn && <Link className="nav-link" to="/users/myprofile">Your Profile</Link>}
-          {loggedIn && <Link className="nav-link" to="/account">Account Settings</Link>}
+          {loggedIn && <Link className="nav-link" to="/users/myprofile/edit">Edit Account</Link>}
           {loggedIn && <LogoutButton onLogout={handleLogout} />}
         </div>
 

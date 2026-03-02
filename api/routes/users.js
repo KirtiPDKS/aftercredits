@@ -7,6 +7,8 @@ const router = express.Router();
 
 router.post("/", UsersController.create);
 router.get('/me', tokenChecker, UsersController.getCurrentUser)
+router.put("/me", tokenChecker, UsersController.updateCurrentUser);
+router.put("/me/password", tokenChecker, UsersController.updateCurrentUserPassword);
 router.get("/all",UsersController.getAllUsers)
 router.get("/:username", tokenChecker, UsersController.getUserByUsername)
 
