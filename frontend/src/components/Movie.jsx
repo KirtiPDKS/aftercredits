@@ -20,7 +20,7 @@ function Movies(props) {
         </div>
 
         <p className="card-text flex-grow-1">
-          {movie.description}
+          {/* {movie.description} */}
         </p>
       </div>
     </article>

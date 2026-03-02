@@ -1,5 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import MovieModal from "../components/MovieModal"
+
 
 export function MovieDetailsPage() {
   const { id } = useParams();
@@ -8,6 +10,8 @@ export function MovieDetailsPage() {
   const [watched, setWatched] = useState(false);
   const [loadingWatchlist, setLoadingWatchlist] = useState(false);
   const [loadingWatched, setLoadingWatched] = useState(false);
+  const [showModal, setShowModal] = useState(false); // comments card popout hidden to start with
+  const [selectedMovie, setSelectedMovie] = useState(null) //starting state is null, no movies selected
 
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -158,9 +162,19 @@ setWatched(isWatched);
                 : "Mark as Watched"}
             </button>
 
-            <button className="btn btn-warning" disabled>
-              Leave Review
+            <button 
+            className="btn btn-warning" 
+            key={movie.id}
+            onClick={() => { setSelectedMovie(movie); setShowModal(true);}}
+            >
+              Leave Review 
             </button>
+              {showModal && selectedMovie && ( //both values from the useState hooks need to be true for the modal to render correctly. 
+                <MovieModal    // passing 2 props to MovieModal
+                  movie={selectedMovie}
+                  onClose={() => setShowModal(false)} // need to pass this onClose prop so movieModal knows how to close itself (see setTimeout) as the state of showModal is managed here on feedback
+                />
+              )}
           </div>
         </div>
       </div>
