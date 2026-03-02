@@ -155,7 +155,7 @@ return <>
           />
           <label htmlFor="Username">Username</label>
         </div>
-        <button role="submit-button" className="btn btn-warning w-100 mb-3">Update Details</button>
+        <button role="details-button" className="btn btn-warning w-100 mb-3">Update Details</button>
         </form>
         <form onSubmit={handlePasswordSubmit}>
         <div className="form-floating mb-3">
@@ -173,7 +173,7 @@ return <>
           <label htmlFor="Password">Password</label>
         </div>
 
-        <button role="submit-button" className="btn btn-warning w-100">
+        <button role="password-button" className="btn btn-warning w-100">
           Update Password
         </button>
         </form>

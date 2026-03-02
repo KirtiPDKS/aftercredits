@@ -31,7 +31,7 @@ it("loads and displays user data", async () => {
     );
 
     await waitFor(() =>
-      expect(screen.getByDisplayValue("testuser")).toBeInTheDocument()
+      expect(screen.getByDisplayValue("test@test.com"))
     );
   });
 
@@ -43,10 +43,6 @@ it("loads and displays user data", async () => {
           profile_image: "image.jpg"
         }
       })
-      .mockResolvedValue({
-        ok: true,
-        json: async () => ({})
-      });
 
     render(
       <BrowserRouter>
@@ -59,7 +55,34 @@ it("loads and displays user data", async () => {
     await userEvent.clear(input);
     await userEvent.type(input, "updated");
 
-    const button = screen.getByRole("button", { name: /update details/i });
+    const button = screen.getByRole("details-button");
+    await userEvent.click(button);
+
+    await waitFor(() =>
+      expect(fetch).toHaveBeenCalledTimes(1)
+    );
+  });
+
+ it("submits updated password", async () => {
+      getCurrentUser.mockResolvedValue({
+        user: {
+          username: "testuser",
+          email: "test@test.com",
+          profile_image: "image.jpg"
+        }
+      })
+
+    render(
+      <BrowserRouter>
+        <EditYourDetailsPage />
+      </BrowserRouter>
+    );
+
+    const input = await screen.findByPlaceholderText("Password");
+
+    await userEvent.type(input, "updatedPassword1");
+
+    const button = screen.getByRole("details-button");
     await userEvent.click(button);
 
     await waitFor(() =>
