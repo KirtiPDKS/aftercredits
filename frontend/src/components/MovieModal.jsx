@@ -13,7 +13,7 @@ function MovieModal({ movie, onClose }) {
     event.preventDefault();
     try {
       const token = localStorage.getItem("token");
-      await addWatchedMovie( movie._id, review, Number(rating), token);
+      await addWatchedMovie( movie._id, review, Number(reviewRating), token);
       setSuccess(true);
       setTimeout(onClose, 1600); // close after short delay
     } catch (err) {
