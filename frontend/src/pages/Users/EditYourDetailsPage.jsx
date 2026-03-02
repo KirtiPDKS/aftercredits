@@ -31,6 +31,8 @@ getCurrentUser(token)
     setImagePreview(
       `${import.meta.env.VITE_BACKEND_URL}${data.user.profile_image}`
     );
+  } else {
+    setImagePreview("https://png.pngtree.com/png-vector/20221130/ourmid/pngtree-user-profile-button-for-web-and-mobile-design-vector-png-image_41767880.jpg")
   }
 
 if(data.token){

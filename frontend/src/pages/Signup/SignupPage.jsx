@@ -43,8 +43,9 @@ export function SignupPage() {
 
             <form onSubmit={handleSubmit}>
 
-              <div className="mb-3">
+              <div className="form-floating mb-3">
                 <input
+                  id="Email"
                   className="form-control"
                   type="text"
                   value={email}
@@ -55,19 +56,22 @@ export function SignupPage() {
                   <div className="text-danger small">Email needs an @</div>}
                 {!email.includes(".") &&
                   <div className="text-danger small">Email needs a dot</div>}
+              <label htmlFor="Email">Email</label>
               </div>
 
-              <div className="mb-3">
+              <div className="form-floating mb-3">
                 <input
+                  id="Username"
                   className="form-control"
                   type="text"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   placeholder="Username"
                 />
+              <label htmlFor="Username">Username</label>
               </div>
 
-              <div className="mb-3">
+              <div className="form-floating mb-3">
                 <input
                   className="form-control"
                   type="password"
@@ -87,6 +91,7 @@ export function SignupPage() {
                   <div className="text-danger small">
                     Password needs a number
                   </div>}
+              <label htmlFor="password">Password</label>
               </div>
 
               <button role="submit-button" className="btn btn-warning w-100">
