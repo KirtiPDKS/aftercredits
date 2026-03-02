@@ -144,12 +144,61 @@ async function removeFromWatched(req, res) {
   }
 }
 
+async function addOrUpdateReview(req, res) {
+  try {
+    const { rating, review } = req.body;
+    const movie_id = req.params.movieId;
+    const user_id = req.user_id;
+
+    // Prevent review text without rating
+    if (review && !rating) {
+      return res.status(400).json({
+        message: "Rating is required if leaving a written review"
+      });
+    }
+
+    let entry = await MoviesWatched.findOne({ user_id, movie_id });
+
+    // If not already watched, create entry
+    if (!entry) {
+      entry = new MoviesWatched({
+        user_id,
+        movie_id,
+        rating,
+        review
+      });
+    } else {
+      entry.rating = rating;
+      entry.review = review;
+    }
+
+    await entry.save();
+
+    await MoviesToWatch.findOneAndDelete({
+      user_id,
+      movie_id,
+    });
+
+    const populated = await entry.populate("movie_id");
+
+    res.status(200).json({
+      message: "Review saved successfully",
+      entry: populated
+    });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+}
+
 const moviesWatchedController = {
   getWatchedMovies: getWatchedMovies,
   createPost: createPost,
   markAsWatched: markAsWatched,
   getMyWatchedMovies:getMyWatchedMovies,
   removeFromWatched: removeFromWatched,
+  addOrUpdateReview: addOrUpdateReview,
 };
 
 module.exports = moviesWatchedController;
