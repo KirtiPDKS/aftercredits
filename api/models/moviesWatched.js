@@ -10,7 +10,7 @@ const MoviesWatchedSchema = new mongoose.Schema({
   movie_id: { type: mongoose.Schema.Types.ObjectId, ref: "Movie", required: true },
   review: String,
   rating: Number,
-});
+}, {timestamps: true});
 
 // We use the Schema to create the Movie model. Models are classes which we can
 // use to construct entries in our Database.

@@ -12,6 +12,7 @@ export function MovieDetailsPage() {
   const [loadingWatched, setLoadingWatched] = useState(false);
   const [showModal, setShowModal] = useState(false); // comments card popout hidden to start with
   const [selectedMovie, setSelectedMovie] = useState(null) //starting state is null, no movies selected
+  const [watchedEntry, setWatchedEntry] = useState(null);
 
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -43,15 +44,15 @@ export function MovieDetailsPage() {
           headers: { Authorization: `Bearer ${token}` },
         });
         const watchedData = await watchedRes.json();
-        const isWatched =
-          watchedData.movies?.some(
-            (entry) =>
-              entry.movie_id &&
-              entry.movie_id._id &&
-              entry.movie_id._id.toString() === id.toString()
-          ) || false;
+        const matchingEntry = watchedData.movies?.find(
+          (entry) =>
+            entry.movie_id?._id?.toString() === id.toString() ||
+            entry.movie_id?.toString?.() === id.toString()
+        );
 
-setWatched(isWatched);
+setWatched(!!matchingEntry);
+setWatchedEntry(matchingEntry || null);
+
       } catch (err) {
         console.error(err);
       }
@@ -88,26 +89,35 @@ setWatched(isWatched);
     }
   };
 
-  const handleWatchedToggle = async () => {
-    setLoadingWatched(true);
-    const token = localStorage.getItem("token");
+const handleWatchedToggle = async () => {
+  setLoadingWatched(true);
+  const token = localStorage.getItem("token");
 
-    try {
-      const method = watched ? "DELETE" : "POST";
-      const res = await fetch(`${BACKEND_URL}/moviesWatched/${id}`, {
-        method,
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const data = await res.json();
-      alert(data.message);
-      setWatched(!watched);
-    } catch (err) {
-      console.error(err);
-      alert("Error updating watched list");
-    } finally {
-      setLoadingWatched(false);
+  try {
+    const method = watched ? "DELETE" : "POST";
+    const res = await fetch(`${BACKEND_URL}/moviesWatched/${id}`, {
+      method,
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    const data = await res.json();
+    alert(data.message);
+
+    const newWatchedState = !watched;
+    setWatched(newWatchedState);
+    
+    if (!newWatchedState) {
+      setWatchedEntry(null);
     }
-  };
+
+  } catch (err) {
+    console.error(err);
+    alert("Error updating watched list");
+  } finally {
+    setLoadingWatched(false);
+    setInWatchlist(false);
+  }
+};
 
   return (
     <div className="container py-4">
@@ -132,6 +142,23 @@ setWatched(isWatched);
             <strong>Release Year:</strong> {displayOrUnknown(movie.releaseYear)}
           </p>
           <p>{displayOrUnknown(movie.description)}</p>
+
+          {watchedEntry && watchedEntry.rating && (
+            <div className="card mt-4 p-3">
+              <h5>Your Review</h5>
+
+              <p>
+                <strong>Rating:</strong> {watchedEntry.rating?.toFixed(1)} / 5
+              </p>      
+                 
+              <p>{watchedEntry.review}</p>
+          
+              <small className="text-muted">
+                Reviewed on{" "}
+                {new Date(watchedEntry.createdAt).toLocaleString()}
+              </small>
+            </div>
+          )}
 
           <div className="d-flex gap-3 mt-3">
             <button
@@ -169,10 +196,17 @@ setWatched(isWatched);
             >
               Leave Review 
             </button>
-              {showModal && selectedMovie && ( //both values from the useState hooks need to be true for the modal to render correctly. 
-                <MovieModal    // passing 2 props to MovieModal
+              {showModal && selectedMovie && (
+                <MovieModal
                   movie={selectedMovie}
-                  onClose={() => setShowModal(false)} // need to pass this onClose prop so movieModal knows how to close itself (see setTimeout) as the state of showModal is managed here on feedback
+                  onClose={(newEntry) => {
+                    setShowModal(false);
+                    if (newEntry) {
+                      setWatched(true);
+                      setWatchedEntry(newEntry);
+                      setInWatchlist(false)
+                    }
+                  }}
                 />
               )}
           </div>

@@ -5,21 +5,36 @@ import { StarRating } from "./starRating";
 
 function MovieModal({ movie, onClose }) { 
   const [review, setReview] = useState(""); //input starts blank
-  const [reviewRating, setReviewRating] = useState("");
+  const [reviewRating, setReviewRating] = useState(0);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    try {
-      const token = localStorage.getItem("token");
-      await addWatchedMovie( movie._id, review, Number(reviewRating), token);
-      setSuccess(true);
-      setTimeout(onClose, 1600); // close after short delay
-    } catch (err) {
-      setError("Something went wrong. Please try again.");
-    }
-  };
+const handleSubmit = async (event) => {
+  event.preventDefault();
+  if (review && !reviewRating) {
+  setError("Please select a rating before writing a review.");
+  return;
+}
+  try {
+    const token = localStorage.getItem("token");
+
+    const savedEntry = await addWatchedMovie(
+      movie._id,
+      review,
+      Number(reviewRating),
+      token
+    );
+
+    setSuccess(true);
+
+    setTimeout(() => {
+      onClose(savedEntry);  // Close after short delay
+    }, 1000);
+
+  } catch (err) {
+    setError("Something went wrong. Please try again.");
+  }
+};
 
 
   return (
@@ -55,8 +70,8 @@ function MovieModal({ movie, onClose }) {
 
             <div className="mb-3">
               Your Rating
-              <StarRating value={Number(reviewRating)} onChange={(val) => setReviewRating(String(val))} />
-              (<i>{Number(reviewRating)} out of 5</i>)
+              <StarRating value={reviewRating} onChange={(val) => setReviewRating(val)} />
+              (<i>{reviewRating} out of 5</i>)
             </div>
 
             {error && <p className="text-danger">{error}</p>}

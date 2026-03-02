@@ -8,5 +8,6 @@ router.get("/me", moviesWatchedController.getMyWatchedMovies);
 router.post("/", moviesWatchedController.createPost);
 router.get("/name/:username", moviesWatchedController.getWatchedMovies);
 router.post("/:movieId", moviesWatchedController.markAsWatched);
+router.put("/:movieId/review", moviesWatchedController.addOrUpdateReview);
 router.delete("/:movieId", moviesWatchedController.removeFromWatched);
 module.exports = router;
