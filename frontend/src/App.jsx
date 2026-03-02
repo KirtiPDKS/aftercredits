@@ -11,6 +11,7 @@ import { MovieDetailsPage } from "./pages/MovieDetailsPage";
 import AllUsersPage from "./pages/Users/AllUsersPage";
 import { GenericProfilePage } from "./pages/Users/GenericProfilePage";
 import { YourProfilePage } from "./pages/Users/YourProfilePage";
+import { EditYourDetailsPage } from "./pages/Users/EditYourDetailsPage";
 
 // docs: https://reactrouter.com/en/main/start/overview
 const router = createBrowserRouter([
@@ -51,6 +52,10 @@ const router = createBrowserRouter([
   {
     path:"/users/myprofile",
     element:<YourProfilePage/>
+  },
+  {
+    path:"/users/myprofile/edit",
+    element:<EditYourDetailsPage/>
   }
   ],
   },

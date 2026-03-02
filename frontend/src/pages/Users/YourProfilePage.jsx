@@ -68,6 +68,6 @@ return <>
 ))}
 
 </div> 
-
+<a href="/users/myprofile/edit" ><button className="btn btn-warning">Edit Account</button></a>
 </>
 }

@@ -3,6 +3,7 @@ const JWT = require("jsonwebtoken")
 
 const app = require("../../app");
 const User = require("../../models/user");
+const { generateToken } = require("../../lib/token");
 
 require("../mongodb_helper");
 
@@ -245,5 +246,81 @@ describe("/users (tests that need tokens) ", () => {
     expect(response.statusCode).toBe(404);
     expect(response.body.message).toBe("User doesn't exist. Unable to get user information");
   });
+
+});
+
+describe("PUT /users/me", () => {
+
+let user;
+let token;
+
+beforeEach(async () => {
+  await User.deleteMany({});
+  user = await User.create({
+    username: "test guy",
+    email: "update@email.com",
+    password: "hashedpassword",
+    profile_image: "testimage"
+  });
+
+  token = generateToken(user._id);
+});
+
+test("updates username", async () => {
+  const response = await request(app)
+    .put("/users/me")
+    .set("Authorization", `Bearer ${token}`)
+    .send({ username: "updatedName" });
+
+  expect(response.status).toBe(200);
+  expect(response.body.username).toBe("updatedName");
+});
+
+test("updates email", async () => {
+  const response = await request(app)
+    .put("/users/me")
+    .set("Authorization", `Bearer ${token}`)
+    .send({ email: "updated@email.com" });
+
+  expect(response.status).toBe(200);
+  expect(response.body.email).toBe("updated@email.com");
+});
+
+test("updates image", async () => {
+  const response = await request(app)
+    .put("/users/me")
+    .set("Authorization", `Bearer ${token}`)
+    .send({ profile_image: "updatedimage" });
+
+  expect(response.status).toBe(200);
+  expect(response.body.profile_image).toBe("updatedimage");
+});
+});
+
+describe("PUT /users/me/password", () => {
+
+let user;
+let token;
+
+beforeEach(async () => {
+  await User.deleteMany({});
+  user = await User.create({
+    username: "test guy",
+    email: "update@test.com",
+    password: "hashedpassword",
+    profile_image: "testimage"
+  });
+
+  token = generateToken(user._id);
+});
+
+test("updates password", async () => {
+  const response = await request(app)
+    .put("/users/me/password")
+    .set("Authorization", `Bearer ${token}`)
+    .send({ password: "changedhashedpassword" });
+
+  expect(response.status).toBe(200);
+});
 
 });
