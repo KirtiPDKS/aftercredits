@@ -59,16 +59,21 @@ async function getCurrentUser(req, res) {
 
 async function updateCurrentUser(req, res) {
   try {
-    const updatedUser = await User.findByIdAndUpdate(
+    const updateData = {
+      username: req.body.username,
+      email: req.body.email,
+    };
+
+    if (req.file) {
+      updateData.profile_image = `/uploads/${req.file.filename}`;
+    }
+
+      const updatedUser = await User.findByIdAndUpdate(
       req.user_id,
-      {
-        username: req.body.username,
-        email: req.body.email,
-        profile_image: req.body.profile_image
-      },
+      updateData,
       { new: true }
     ).select("-password");
-
+    
     res.status(200).json(updatedUser);
   } catch (err) {
     res.status(500).json({ message: "Server error" });

@@ -25,6 +25,7 @@ app.use("/movies", tokenChecker, postsRouter);
 app.use('/moviesWatched', tokenChecker, moviesWatchedRouter)
 app.use('/moviesToWatch', tokenChecker, MoviesToWatchController)
 app.use("/tokens", authenticationRouter);
+app.use("/uploads", express.static("uploads"));
 
 // 404 Handler
 app.use((_req, res) => {
