@@ -12,6 +12,7 @@ export function MovieDetailsPage() {
   const [loadingWatched, setLoadingWatched] = useState(false);
   const [showModal, setShowModal] = useState(false); // comments card popout hidden to start with
   const [selectedMovie, setSelectedMovie] = useState(null) //starting state is null, no movies selected
+  const [userWatchedEntry, setUserWatchedEntry] = useState(null)
 
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -38,18 +39,32 @@ export function MovieDetailsPage() {
         );
         setInWatchlist(isInWatchlist);
 
+        
+
         // Check watched list
         const watchedRes = await fetch(`${BACKEND_URL}/moviesWatched`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const watchedData = await watchedRes.json();
-        const isWatched = watchedData.movies.some(
-          (entry) => entry.movie_id === id
-        );
-        setWatched(isWatched);
-      } catch (err) {
-        console.error(err);
-      }
+        console.log(watchedData)
+        const isWatched =
+          watchedData.movies?.some(
+            (entry) =>
+              entry.movie_id &&
+              entry.movie_id._id &&
+              entry.movie_id._id.toString() === id.toString()
+          ) || false;
+
+          const watchedEntry = watchedData.movies?.find(
+            (entry) => entry.movie_id?._id?.toString() === id.toString()
+          ) ?? null; 
+
+          setUserWatchedEntry(watchedEntry)
+
+          setWatched(isWatched)
+            } catch (err) {
+          console.error(err);
+          }
     }
 
     fetchMovie();
@@ -165,10 +180,16 @@ export function MovieDetailsPage() {
               Leave Review 
             </button>
               {showModal && selectedMovie && ( //both values from the useState hooks need to be true for the modal to render correctly. 
-                <MovieModal    // passing 2 props to MovieModal
+                <MovieModal    // passing 4 props to MovieModal
+                  key={userWatchedEntry?._id ?? 'new'}
                   movie={selectedMovie}
                   onClose={() => setShowModal(false)} // need to pass this onClose prop so movieModal knows how to close itself (see setTimeout) as the state of showModal is managed here on feedback
+                  existingReview={userWatchedEntry?.review ?? ''}
+                  existingRating={userWatchedEntry?.rating ?? ''}
+
                 />
+                // , userWatchedEntry?.review ?? ''
+
               )}
           </div>
         </div>

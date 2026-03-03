@@ -3,14 +3,18 @@ import { useState } from "react";
 import { addWatchedMovie } from "../services/moviesWatched";
 import { StarRating } from "./starRating";
 
-function MovieModal({ movie, onClose }) { 
-  const [review, setReview] = useState(""); //input starts blank
-  const [reviewRating, setReviewRating] = useState("");
+function MovieModal({ movie, onClose, existingReview, existingRating }) { 
+  const [review, setReview] = useState(existingReview);
+  const [reviewRating, setReviewRating] = useState(existingRating);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (ratingRequiredButMissing) 
+      {
+      return setError("Please enter a rating.")
+      } else {setError(null)}
     try {
       const token = localStorage.getItem("token");
       await addWatchedMovie( movie._id, review, Number(reviewRating), token);
@@ -21,6 +25,9 @@ function MovieModal({ movie, onClose }) {
     }
   };
 
+  const hasReview = review.trim().length > 0
+  const RatingMissing = Number(reviewRating) === 0;
+  const ratingRequiredButMissing = hasReview && RatingMissing;
 
   return (
 <div
@@ -55,14 +62,16 @@ function MovieModal({ movie, onClose }) {
 
             <div className="mb-3">
               Your Rating
-              <StarRating value={Number(reviewRating)} onChange={(val) => setReviewRating(String(val))} />
+              <StarRating value={Number(reviewRating)} onChange={(val) => {setReviewRating(String(val)); setError(null);}} />
               (<i>{Number(reviewRating)} out of 5</i>)
             </div>
 
             {error && <p className="text-danger">{error}</p>}
             {success && <p className="text-success">Review saved and added to watched list 🎞️ </p>}
 
-            <button type="submit" className="btn btn-warning w-100">Save</button>
+            <button type="submit" 
+            className="btn btn-warning w-100"
+            >Save</button>
           </form>
 
         </div>
