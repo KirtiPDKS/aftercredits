@@ -4,11 +4,16 @@ import "@testing-library/jest-dom";
 
 import { FeedPage } from "../../src/pages/Feed/FeedPage";
 import { getMovies } from "../../src/services/movies";
+import { getWatchList } from "../../src/services/moviesToWatch";
 
 
 // Mocking movies
 vi.mock("../../src/services/movies", () => ({
   getMovies: vi.fn(),
+}));
+
+vi.mock("../../src/services/moviesToWatch", () => ({
+  getWatchList: vi.fn(),
 }));
 
 // Mocking components
@@ -20,7 +25,7 @@ vi.mock("../../src/components/Movie", () => ({
   default: ({ movie }) => (
     <article>
       <h3>{movie.title}</h3>
-      <p>{movie.release_year}</p>
+      <p>{movie.releaseYear}</p>
       <p>{movie.description}</p>
     </article>
   ),
@@ -58,6 +63,7 @@ describe("FeedPage", () => {
       movies: mockMovies,
       token: "newToken",
     });
+    getWatchList.mockResolvedValue({ movies: [] });
 
     render(<FeedPage />);
 
@@ -90,17 +96,49 @@ describe("FeedPage", () => {
     });
   });
 
-  // Logout button renders
-  test("renders Logout button", async () => {
-    window.localStorage.setItem("token", "testToken");
+  test("displays user's watchlist movies", async () => {
+  window.localStorage.setItem("token", "testToken");
 
-    getMovies.mockResolvedValue({
-      movies: [],
-      token: "newToken",
-    });
+  // Minimal movies list, so main movies don't interfere
+  getMovies.mockResolvedValue({ movies: [], token: "mainToken" });
 
-    render(<FeedPage />);
+  // Watchlist movies
+  const mockWatchlist = [
+    {
+      _id: "wl1",
+      movie_id: {
+        _id: "m1",
+        title: "Watchlist Movie 1",
+        releaseYear: 2010,
+        description: "First watchlist movie",
+      },
+    },
+    {
+      _id: "wl2",
+      movie_id: {
+        _id: "m2",
+        title: "Watchlist Movie 2",
+        releaseYear: 2015,
+        description: "Second watchlist movie",
+      },
+    },
+  ];
 
-    expect(await screen.findByText("Logout")).toBeInTheDocument();
-  });
+  getWatchList.mockResolvedValue({ movies: mockWatchlist });
+
+  render(<FeedPage />);
+
+  // Check that both watchlist movies appear
+  expect(await screen.findByText("Watchlist Movie 1")).toBeInTheDocument();
+  expect(screen.getByText("2010")).toBeInTheDocument();
+  expect(screen.getByText("First watchlist movie")).toBeInTheDocument();
+
+  expect(await screen.findByText("Watchlist Movie 2")).toBeInTheDocument();
+  expect(screen.getByText("2015")).toBeInTheDocument();
+  expect(screen.getByText("Second watchlist movie")).toBeInTheDocument();
 });
+
+
+
+});
+

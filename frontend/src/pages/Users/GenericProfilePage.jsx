@@ -31,11 +31,11 @@ const [Image, setImage] = useState(null);
             setUser(data.user);
             if (data.user.profile_image) {
             setImage(
-              `${import.meta.env.VITE_BACKEND_URL}${data.user.profile_image}`
+            `${import.meta.env.VITE_BACKEND_URL}${data.user.profile_image}`
             );
-          } else {
+        } else {
             setImage("https://png.pngtree.com/png-vector/20221130/ourmid/pngtree-user-profile-button-for-web-and-mobile-design-vector-png-image_41767880.jpg")
-          }
+        }
             if(data.token){
             localStorage.setItem("token", data.token);
             }
@@ -58,6 +58,7 @@ const [Image, setImage] = useState(null);
 
 if (!user) return <p>Loading user...</p>
 
+
 return (
   <div className="container mt-4">
     <div className="card shadow-sm mb-4 p-4">
@@ -76,27 +77,27 @@ return (
 
     {/* Movies Watched Section */}
     <div className="card shadow-sm mb-4 p-4">
-      <h4 className="mb-3">Movies Watched</h4>
+    <h4 className="mb-3">Movies Watched</h4>
 
-      {watchedMovies.length === 0 ? (
+    {watchedMovies.length === 0 ? (
         <p className="text-muted">No movies watched yet.</p>
-      ) : (
+    ) : (
         <div className="row">
-          {watchedMovies.map((movie) => (
+        {watchedMovies.map((movie) => (
             <div
-              className="col-12 col-sm-6 col-md-4 col-lg-3 mb-4"
-              key={movie.movie_id._id}
+            className="flex-shrink-0 d-flex"
+            key={movie.movie_id._id}
             >
-              <Link
+            <Link
                 to={`/movies/${movie.movie_id._id}`}
-                className="text-decoration-none text-dark"
-              >
+                className="text-decoration-none text-dark h-100 d-flex flex-column"
+            >
                 <Movies movie={movie.movie_id} />
-              </Link>
+            </Link>
             </div>
-          ))}
+        ))}
         </div>
-      )}
+    )}
     </div>
 
     {/* Reviews Section */}
@@ -125,6 +126,6 @@ return (
           ))
       )}
     </div>
-  </div>
+    </div>
 );
 }

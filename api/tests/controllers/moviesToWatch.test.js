@@ -124,7 +124,7 @@ describe("/moviesToWatch", () => {
         .set("Authorization", `Bearer ${token}`);
 
       expect(response.body.movies.length).toEqual(1);
-      expect(response.body.movies[0].movie_id.toString()).toEqual(movieId.toString());
+      expect(response.body.movies[0].movie_id._id.toString()).toEqual(movieId.toString());;
     });
 
     test("returns a new token", async () => {
@@ -149,7 +149,7 @@ describe("/moviesToWatch", () => {
       expect(response.body.movies).toEqual(undefined);
     });
   });
-});
+
 
 // --- DELETE routes---
 
@@ -199,3 +199,4 @@ describe("DELETE, when token is missing", () => {
     expect(response.status).toEqual(401);
   });
 });
+})

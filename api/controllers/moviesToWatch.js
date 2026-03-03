@@ -1,8 +1,8 @@
 const MoviesToWatch = require('../models/moviesToWatch')
 const { generateToken } = require("../lib/token");
 
-async function getAllPosts(req, res) {
-  const movies = await MoviesToWatch.find();
+async function getWatchList(req, res) {
+  const movies = await MoviesToWatch.find({user_id:req.user_id}).populate("movie_id");
   const token = generateToken(req.user_id);
   res.status(200).json({ movies: movies, token: token });
 }
@@ -28,7 +28,7 @@ async function addToWatchlist(req, res) {
     }
 
     // Create new entry
-    const entry = new MoviesToWatch({ user_id, movie_id });
+    const entry = new MoviesToWatch({ user_id:req.user_id, movie_id });
     await entry.save();
 
     const newToken = generateToken(user_id);
@@ -71,7 +71,7 @@ async function removeFromWatchlist(req, res) {
 }
 
 const MoviesToWatchController = {
-  getAllPosts: getAllPosts,
+  getWatchList: getWatchList,
   createPost: createPost,
   addToWatchlist: addToWatchlist,
   removeFromWatchlist: removeFromWatchlist,
