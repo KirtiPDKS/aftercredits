@@ -41,33 +41,85 @@ const [watchedMovies, setWatchedMovies] = useState([])
 
 if (!user) return <p>Loading user...</p>
 
-return <>
-<h2>Welcome to the userspage</h2>
-<h2>{user.username}</h2>
-<div>{user.image}</div>
+return (
+  <div className="container mt-4">
 
-<h3>Movies Watched</h3>
-<div className="container row" >
-    {watchedMovies.map((movie) => (
-        <div className="col-12 col-sm-6 col-md-4 col-lg-3 mb-4"
-        key={movie.movie_id._id}> 
-        <Link to={`/movies/${movie.movie_id._id}`} className="text-decoration-none text-dark">
-            <Movies movie={movie.movie_id} />
-        </Link>
-        </div> 
-    ))}
+    {/* Profile Header */}
+    <div className="card shadow-sm mb-4 p-4 text-center">
+      <h2 className="mb-2">{user.username}</h2>
+      {user.image && (
+        <img
+          src={user.image}
+          alt="Profile"
+          className="rounded-circle mx-auto"
+          style={{ width: "120px", height: "120px", objectFit: "cover" }}
+        />
+      )}
     </div>
 
-<h3>Reviews</h3>
-<div>{watchedMovies.map((movie) => (
-    (movie.review) && (
-    <div key={movie._id}>
-    <p>{movie.movie_id.title}</p>
-    <p>{movie.review}, {movie.rating} </p>
-    </div>)
-))}
+    {/* Movies Watched Section */}
+    <div className="card shadow-sm mb-4 p-4">
+      <h4 className="mb-3">Movies Watched</h4>
 
-</div> 
-<a href="/users/myprofile/edit" ><button className="btn btn-warning">Edit Account</button></a>
-</>
+      {watchedMovies.length === 0 ? (
+        <p className="text-muted">No movies watched yet.</p>
+      ) : (
+        <div className="row">
+          {watchedMovies.map((movie) => (
+            <div
+              className="col-12 col-sm-6 col-md-4 col-lg-3 mb-4"
+              key={movie.movie_id._id}
+            >
+              <Link
+                to={`/movies/${movie.movie_id._id}`}
+                className="text-decoration-none text-dark"
+              >
+                <Movies movie={movie.movie_id} />
+              </Link>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+
+    {/* Reviews Section */}
+    <div className="card shadow-sm mb-4 p-4">
+      <h4 className="mb-3">Reviews</h4>
+
+      {watchedMovies.filter((movie) => movie.review).length === 0 ? (
+        <p className="text-muted">No reviews written yet.</p>
+      ) : (
+        watchedMovies
+          .filter((movie) => movie.review)
+          .map((movie) => (
+            <div key={movie._id} className="border-bottom pb-3 mb-3">
+              <h6 className="mb-1">{movie.movie_id.title}</h6>
+              <p className="mb-1">{movie.review}</p>
+              {movie.rating && (
+                <small className="text-muted">
+                  Rating:{" "}
+                  {Number.isInteger(movie.rating)
+                    ? movie.rating
+                    : movie.rating.toFixed(1)}{" "}
+                  / 5
+                </small>
+              )}
+            </div>
+          ))
+      )}
+    </div>
+
+    {/* Edit Button (only keep this in YourProfilePage) */}
+    {user && (
+      <div className="text-center mb-5">
+        <Link to="/users/myprofile/edit">
+          <button className="btn btn-warning px-4">
+            Edit Account
+          </button>
+        </Link>
+      </div>
+    )}
+
+  </div>
+);
 }

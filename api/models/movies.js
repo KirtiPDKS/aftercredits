@@ -9,6 +9,7 @@ const MovieSchema = new mongoose.Schema({
   description: String,
   director: String,
   image: String,
+  averageRating: Number,
 });
 
 // We use the Schema to create the Movie model. Models are classes which we can
