@@ -11,7 +11,8 @@ const movies = [
       "Inception is a science-fiction thriller directed by Christopher Nolan starring Leonardo DiCaprio as Dom Cobb, a skilled thief who steals secrets from within dreams. He is offered a chance at redemption if he can successfully perform inception — planting an idea into someone's subconscious. The film is known for its layered dream worlds and practical effects.",
     director: "Christopher Nolan",
     image: "https://www.tallengestore.com/cdn/shop/products/Inception-LeonardoDiCaprio-ChristopherNolan-HollywoodSciFiMoviePoster_66029b94-50ae-494c-b11d-60a3d91268b5.jpg?v=1685582036",
-  },
+  averageRating: 0
+},
   {
     title: "Princess Mononoke",
     genre: "Fantasy epic",
@@ -21,7 +22,8 @@ const movies = [
     director: "Hayao Miyazaki",
     image:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSmhhXRSGGpVrqeICGcpaQmvMFCe8es6eSSLTTs-tt9mENbyAZSNeeqsqnYo2P55HpCT22M&s=10",
-  },
+  averageRating: 0
+},
   {
     title: "Good Will Hunting",
     genre: "Drama",
@@ -30,7 +32,8 @@ const movies = [
       "Good Will Hunting is a drama directed by Gus Van Sant starring Matt Damon as a self-taught mathematical genius working as a janitor at MIT. After assaulting a police officer, he must attend therapy sessions with psychologist Sean Maguire, played by Robin Williams. The film explores trauma, identity, and untapped potential, and won Academy Awards for Best Supporting Actor and Best Original Screenplay.",
     director: "Gus Van Sant",
     image: "https://upload.wikimedia.org/wikipedia/en/5/52/Good_Will_Hunting.png",
-  },
+  averageRating: 0
+},
   
   {
     title: "The Dark Knight",
@@ -40,7 +43,8 @@ const movies = [
       "The Dark Knight is a superhero crime drama directed by Christopher Nolan starring Christian Bale as Batman and Heath Ledger as the Joker. Batman faces his greatest psychological and moral challenge as the Joker unleashes chaos on Gotham City. The film is widely praised for Ledger’s iconic performance and its grounded, gritty tone.",
     director: "Christopher Nolan",
     image: "https://www.vintagemovieposters.co.uk/wp-content/uploads/2019/01/IMG_5891.jpeg",
-  },
+  averageRating: 0
+},
   {
     title: "Parasite",
     genre: "Thriller drama",
@@ -49,7 +53,8 @@ const movies = [
       "Parasite is a South Korean thriller directed by Bong Joon-ho starring Song Kang-ho. The film follows a struggling family who cleverly infiltrate the lives of a wealthy household, leading to unexpected and explosive consequences. It became the first non-English language film to win the Academy Award for Best Picture.",
     director: "Bong Joon-ho",
     image: "https://upload.wikimedia.org/wikipedia/en/5/53/Parasite_%282019_film%29.png",
-  },
+  averageRating: 0
+},
   {
     title: "Interstellar",
     genre: "Sci-fi epic",
@@ -58,7 +63,8 @@ const movies = [
       "Interstellar is a science-fiction epic directed by Christopher Nolan starring Matthew McConaughey as a former NASA pilot tasked with finding a new habitable planet for humanity. Traveling through a wormhole near Saturn, the crew face extreme time dilation and emotional sacrifice. The film is noted for its scientific accuracy and Hans Zimmer’s score.",
     director: "Christopher Nolan",
     image: "https://upload.wikimedia.org/wikipedia/en/b/bc/Interstellar_film_poster.jpg",
-  },
+  averageRating: 0
+},
   {
     title: "The Social Network",
     genre: "Biographical drama",
@@ -68,7 +74,8 @@ const movies = [
     director: "David Fincher",
     image:
       "https://upload.wikimedia.org/wikipedia/en/8/8c/The_Social_Network_film_poster.png",
-  },
+  averageRating: 0
+},
   {
     title: "Get Out",
     genre: "Horror thriller",
@@ -77,7 +84,8 @@ const movies = [
       "Get Out is a horror thriller directed by Jordan Peele starring Daniel Kaluuya as a young man visiting his girlfriend’s family estate. What begins as awkward social tension escalates into something far more sinister. The film blends social commentary with psychological horror and won the Academy Award for Best Original Screenplay.",
     director: "Jordan Peele",
     image: "https://upload.wikimedia.org/wikipedia/en/a/a3/Get_Out_poster.png",
-  },
+  averageRating: 0
+},
   {
     title: "Whiplash",
     genre: "Drama",
@@ -86,7 +94,8 @@ const movies = [
       "Whiplash is a drama directed by Damien Chazelle starring Miles Teller as an ambitious jazz drummer and J.K. Simmons as his ruthless instructor. The intense mentor-student dynamic pushes both characters to extremes in pursuit of greatness. The film is acclaimed for its editing and Simmons’ Oscar-winning performance.",
     director: "Damien Chazelle",
     image: "https://upload.wikimedia.org/wikipedia/en/0/01/Whiplash_poster.jpg",
-  },
+  averageRating: 0
+},
   {
     title: "The Grand Budapest Hotel",
     genre: "Comedy drama",
@@ -96,7 +105,8 @@ const movies = [
     director: "Wes Anderson",
     image:
       "https://upload.wikimedia.org/wikipedia/en/a/a6/The_Grand_Budapest_Hotel_Poster.jpg",
-  },
+  averageRating: 0
+},
   {
     title: "Mad Max: Fury Road",
     genre: "Post-apocalyptic action",
@@ -105,7 +115,8 @@ const movies = [
       "Mad Max: Fury Road is a post-apocalyptic action film directed by George Miller starring Tom Hardy and Charlize Theron. Set in a desert wasteland, the film follows a high-speed escape from a tyrannical warlord. It is renowned for its practical stunts and relentless pacing.",
     director: "George Miller",
     image: "https://upload.wikimedia.org/wikipedia/en/2/23/Mad_Max_Fury_Road.jpg",
-  },
+  averageRating: 0
+},
   {
     title: "La La Land",
     genre: "Romantic musical drama",
@@ -114,7 +125,8 @@ const movies = [
       "La La Land is a romantic musical drama directed by Damien Chazelle starring Ryan Gosling and Emma Stone. The film follows two aspiring artists navigating love and ambition in Los Angeles. It is known for its vibrant cinematography and modern take on classic Hollywood musicals.",
     director: "Damien Chazelle",
     image: "https://upload.wikimedia.org/wikipedia/en/a/ab/La_La_Land_%28film%29.png",
-  },
+  averageRating: 0
+},
   {
     title: "The Matrix",
     genre: "Sci-fi action",
@@ -123,7 +135,8 @@ const movies = [
       "The Matrix is a science-fiction action film directed by the Wachowskis starring Keanu Reeves as Neo, a hacker who discovers reality is a simulated construct. He joins a rebellion against intelligent machines controlling humanity. The film revolutionized action cinema with its bullet-time visual effects.",
     director: "The Wachowskis",
     image: "https://upload.wikimedia.org/wikipedia/en/c/c1/The_Matrix_Poster.jpg",
-  },
+  averageRating: 0
+},
   {
     title: "Joker",
     genre: "Psychological drama",
@@ -132,7 +145,8 @@ const movies = [
       "Joker is a psychological drama directed by Todd Phillips starring Joaquin Phoenix as Arthur Fleck, a struggling comedian descending into madness. The film explores themes of isolation and societal neglect. Phoenix won the Academy Award for Best Actor for his performance.",
     director: "Todd Phillips",
     image: "https://upload.wikimedia.org/wikipedia/en/e/e1/Joker_%282019_film%29_poster.jpg",
-  },
+  averageRating: 0
+},
   {
     title: "The Shawshank Redemption",
     genre: "Drama",
@@ -142,7 +156,8 @@ const movies = [
     director: "Frank Darabont",
     image:
       "https://upload.wikimedia.org/wikipedia/en/8/81/ShawshankRedemptionMoviePoster.jpg",
-  },
+  averageRating: 0
+},
   {
     title: "Gladiator",
     genre: "Historical epic",
@@ -151,7 +166,8 @@ const movies = [
       "Gladiator is a historical epic directed by Ridley Scott starring Russell Crowe as a betrayed Roman general seeking vengeance. Forced into slavery, he rises as a gladiator in the Colosseum. The film won the Academy Award for Best Picture.",
     director: "Ridley Scott",
     image: "https://upload.wikimedia.org/wikipedia/en/8/8d/Gladiator_ver1.jpg",
-  },
+  averageRating: 0
+},
   {
     title: "Black Panther",
     genre: "Superhero action",
@@ -161,7 +177,8 @@ const movies = [
     director: "Ryan Coogler",
     image:
       "https://upload.wikimedia.org/wikipedia/en/d/d6/Black_Panther_%28film%29_poster.jpg",
-  },
+  averageRating: 0
+},
   {
     title: "The Lord of the Rings: The Fellowship of the Ring",
     genre: "Fantasy adventure",
@@ -170,7 +187,8 @@ const movies = [
       "The Fellowship of the Ring is a fantasy adventure directed by Peter Jackson starring Elijah Wood as Frodo Baggins. Frodo embarks on a perilous journey to destroy a powerful ring that threatens Middle-earth. The film launched an acclaimed trilogy based on J.R.R. Tolkien’s novels.",
     director: "Peter Jackson",
     image: "https://upload.wikimedia.org/wikipedia/en/8/87/Ringstrilogyposter.jpg",
-  },
+  averageRating: 0
+},
   {
     title: "The Silence of the Lambs",
     genre: "Psychological thriller",
@@ -180,7 +198,8 @@ const movies = [
     director: "Jonathan Demme",
     image:
       "https://upload.wikimedia.org/wikipedia/en/8/86/The_Silence_of_the_Lambs_poster.jpg",
-  },
+  averageRating: 0
+},
   {
     title: "Avengers: Endgame",
     genre: "Superhero epic",
@@ -189,7 +208,8 @@ const movies = [
       "Avengers: Endgame is a superhero epic directed by Anthony and Joe Russo starring Robert Downey Jr. and Chris Evans. The surviving Avengers attempt to reverse the devastation caused by Thanos. The film became one of the highest-grossing films of all time.",
     director: "Anthony and Joe Russo",
     image: "https://upload.wikimedia.org/wikipedia/en/0/0d/Avengers_Endgame_poster.jpg",
-  },
+  averageRating: 0
+},
   {
     title: "Fight Club",
     genre: "Psychological drama",
@@ -198,7 +218,8 @@ const movies = [
       "Fight Club is a psychological drama directed by David Fincher starring Edward Norton and Brad Pitt. An insomniac office worker forms an underground fight club that spirals into anarchic rebellion. The film gained cult status for its provocative themes.",
     director: "David Fincher",
     image: "https://upload.wikimedia.org/wikipedia/en/f/fc/Fight_Club_poster.jpg",
-  },
+  averageRating: 0
+},
   {
     title: "Titanic",
     genre: "Romantic epic",
@@ -207,7 +228,8 @@ const movies = [
       "Titanic is a romantic epic directed by James Cameron starring Leonardo DiCaprio and Kate Winslet. The film tells the tragic love story of two passengers aboard the ill-fated RMS Titanic. It became one of the most successful films in cinematic history.",
     director: "James Cameron",
     image: "https://upload.wikimedia.org/wikipedia/en/2/22/Titanic_poster.jpg",
-  },
+  averageRating: 0
+},
   {
     title: "Perchance",
     genre: "Indie drama",
@@ -217,7 +239,8 @@ const movies = [
     director: "Ava Laurent",
     image:
       "https://www.imdb.com/title/tt5858744/mediaviewer/rm355937024/?ref_=tt_ov_i",
-  },
+  averageRating: 0
+},
 ];
 
 async function seed() {

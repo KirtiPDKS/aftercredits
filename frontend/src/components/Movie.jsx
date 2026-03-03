@@ -1,3 +1,4 @@
+
 function Movies(props) {
   const { movie } = props;
 
@@ -16,6 +17,9 @@ function Movies(props) {
           <h5 className="card-title mb-0">{movie.title}</h5>
           <span className="badge bg-secondary">
             {movie.releaseYear}
+          </span>
+          <span className="badge bg-secondary">
+            {Number(movie.averageRating?.toFixed(1))}
           </span>
         </div>
 

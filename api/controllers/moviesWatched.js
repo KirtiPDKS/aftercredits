@@ -1,5 +1,6 @@
 const MoviesWatched = require('../models/moviesWatched')
 const MoviesToWatch = require('../models/moviesToWatch')
+const Movies = require("../models/movies");
 const User = require("../models/user")
 const { generateToken } = require("../lib/token");
 
@@ -133,6 +134,7 @@ async function removeFromWatched(req, res) {
     }
 
     const newToken = generateToken(user_id);
+    await updateAverageRating(movie_id);
     res.status(200).json({
       message: "Movie removed from watched list",
       token: newToken,
@@ -174,6 +176,8 @@ async function addOrUpdateReview(req, res) {
 
     await entry.save();
 
+    await updateAverageRating(movie_id);
+
     await MoviesToWatch.findOneAndDelete({
       user_id,
       movie_id,
@@ -192,6 +196,24 @@ async function addOrUpdateReview(req, res) {
   }
 }
 
+async function updateAverageRating(movieId) {
+  const ratings = await MoviesWatched.find({
+    movie_id: movieId,
+    rating: { $ne: null }
+  });
+
+  let average = 0;
+
+  if (ratings.length > 0) {
+    const total = ratings.reduce((sum, r) => sum + r.rating, 0);
+    average = total / ratings.length;
+  }
+
+  await Movies.findByIdAndUpdate(movieId, {
+    averageRating: average
+  });
+}
+
 const moviesWatchedController = {
   getWatchedMovies: getWatchedMovies,
   createPost: createPost,
@@ -199,6 +221,7 @@ const moviesWatchedController = {
   getMyWatchedMovies:getMyWatchedMovies,
   removeFromWatched: removeFromWatched,
   addOrUpdateReview: addOrUpdateReview,
+  updateAverageRating: updateAverageRating,
 };
 
 module.exports = moviesWatchedController;
