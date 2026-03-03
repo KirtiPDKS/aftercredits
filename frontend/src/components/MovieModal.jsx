@@ -3,11 +3,12 @@ import { useState } from "react";
 import { addWatchedMovie } from "../services/moviesWatched";
 import { StarRating } from "./starRating";
 
-function MovieModal({ movie, onClose }) { 
-  const [review, setReview] = useState(""); //input starts blank
-  const [reviewRating, setReviewRating] = useState(0);
+function MovieModal({ movie, onClose, onSaved, existingReview, existingRating }) { 
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
+  const [review, setReview] = useState(existingReview ?? "");
+  const [reviewRating, setReviewRating] = useState(existingRating ?? 0);
+
 
 const handleSubmit = async (event) => {
   event.preventDefault();
@@ -28,7 +29,7 @@ const handleSubmit = async (event) => {
     setSuccess(true);
 
     setTimeout(() => {
-      onClose(savedEntry);  // Close after short delay
+      onSaved(savedEntry);  // Close after short delay
     }, 1000);
 
   } catch (err) {
@@ -56,7 +57,7 @@ const handleSubmit = async (event) => {
               className="input-group-text"
               style={{ alignItems: "flex-start", paddingTop: "0.5rem" }}
               > 
-              Your Review 
+              Your Review
               </span>
 
               <textarea
