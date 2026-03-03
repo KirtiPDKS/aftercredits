@@ -48,7 +48,7 @@ return <>
 
 <h3>Movies Watched</h3>
 <div className="container row" >
-    {watchedMovies.map((movie) => (
+    {watchedMovies.filter((movie) => (movie.movie_id)).map((movie) => (
         <div className="col-12 col-sm-6 col-md-4 col-lg-3 mb-4"
         key={movie.movie_id._id}> 
         <Link to={`/movies/${movie.movie_id._id}`} className="text-decoration-none text-dark">

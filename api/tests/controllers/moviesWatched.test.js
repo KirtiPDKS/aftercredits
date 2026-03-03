@@ -199,6 +199,8 @@ describe("GET /moviesWatched/name/:username", () => {
   test("responds with 401 if token missing", async () => {
     const response = await request(app)
       .get("/moviesWatched/name/movie-addict");
+  });
+});
     
 // --- DELETE routes---
 
@@ -248,4 +250,4 @@ describe("DELETE, when token is missing", () => {
     expect(response.status).toEqual(401);
   });
 });
-});
+  });

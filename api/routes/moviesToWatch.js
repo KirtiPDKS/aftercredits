@@ -3,7 +3,7 @@ const router = express.Router();
 
 const MoviesToWatchController = require('../controllers/moviesToWatch')
 
-router.get("/", MoviesToWatchController.getAllPosts);
+router.get("/", MoviesToWatchController.getWatchList);
 router.post("/", MoviesToWatchController.createPost);
 router.post("/:movieId", MoviesToWatchController.addToWatchlist);
 router.delete("/:movieId", MoviesToWatchController.removeFromWatchlist);
