@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import MovieModal from "../components/MovieModal"
-
+import { formatDate } from "../utils/date";
 
 export function MovieDetailsPage() {
   const { id } = useParams();
@@ -148,14 +148,15 @@ const handleWatchedToggle = async () => {
               <h5>Your Review</h5>
 
               <p>
-                <strong>Rating:</strong> {watchedEntry.rating?.toFixed(1)} / 5
+                <strong>Rating:</strong> {Number.isInteger(watchedEntry.rating)
+                  ? watchedEntry.rating
+                  : watchedEntry.rating.toFixed(1)} / 5
               </p>      
                  
               <p>{watchedEntry.review}</p>
           
               <small className="text-muted">
-                Reviewed on{" "}
-                {new Date(watchedEntry.createdAt).toLocaleString()}
+                Reviewed {formatDate(watchedEntry.createdAt)}
               </small>
             </div>
           )}
