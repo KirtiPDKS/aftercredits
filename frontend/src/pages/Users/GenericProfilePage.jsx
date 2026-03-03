@@ -10,6 +10,7 @@ const {username} = useParams();
 const navigate = useNavigate();
 const [user, setUser] = useState(null)
 const [watchedMovies, setWatchedMovies] = useState([])
+const [Image, setImage] = useState(null);
 
     useEffect(() => {
     const token = localStorage.getItem("token");
@@ -28,6 +29,13 @@ const [watchedMovies, setWatchedMovies] = useState([])
     getUser(username,token)
         .then((data) => {
             setUser(data.user);
+            if (data.user.profile_image) {
+            setImage(
+              `${import.meta.env.VITE_BACKEND_URL}${data.user.profile_image}`
+            );
+          } else {
+            setImage("https://png.pngtree.com/png-vector/20221130/ourmid/pngtree-user-profile-button-for-web-and-mobile-design-vector-png-image_41767880.jpg")
+          }
             if(data.token){
             localStorage.setItem("token", data.token);
             }
@@ -52,18 +60,18 @@ if (!user) return <p>Loading user...</p>
 
 return (
   <div className="container mt-4">
-
-    {/* Profile Header */}
-    <div className="card shadow-sm mb-4 p-4 text-center">
-      <h2 className="mb-2">{user.username}</h2>
-      {user.image && (
+    <div className="card shadow-sm mb-4 p-4">
+      <div className="d-flex align-items-center justify-content-center gap-3">
+      {Image && (
         <img
-          src={user.image}
+          src={Image}
           alt="Profile"
-          className="rounded-circle mx-auto"
-          style={{ width: "120px", height: "120px", objectFit: "cover" }}
+          className="rounded-circle"
+          style={{ width: "60px", height: "60px", objectFit: "cover" }}
         />
       )}
+    <h2 className="mb-0">{user.username}</h2>
+    </div>
     </div>
 
     {/* Movies Watched Section */}
