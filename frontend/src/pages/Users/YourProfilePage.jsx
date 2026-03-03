@@ -63,23 +63,7 @@ return (
       )}
     <h2 className="mb-0">{user.username}</h2>
     </div>
-    </div>
-
-
-//<h3>Movies Watched</h3>
-//<div className="container mb-4" >
-  //  <div className="d-flex overflow-x-auto gap-3 align-items-stretch">
-  //  {watchedMovies.filter((movie) => (movie.movie_id)).map((movie) => (
-   //     <div className="flex-shrink-0 d-flex"
-   //     key={movie.movie_id._id}> 
-    //    <Link to={`/movies/${movie.movie_id._id}`} className="text-decoration-none text-dark h-100 d-flex flex-column">
-     //       <Movies movie={movie.movie_id} />
-     //   </Link>
-     //   </div> 
-   // ))}
-   // </div>
-   // </div>
-    
+    </div>    
 
     {/* Movies Watched Section */}
     <div className="card shadow-sm mb-4 p-4">
@@ -91,12 +75,12 @@ return (
         <div className="row">
           {watchedMovies.map((movie) => (
             <div
-              className="col-12 col-sm-6 col-md-4 col-lg-3 mb-4"
+              className="d-flex overflow-x-auto gap-3 align-items-stretch"
               key={movie.movie_id._id}
             >
               <Link
                 to={`/movies/${movie.movie_id._id}`}
-                className="text-decoration-none text-dark"
+                className="text-decoration-none text-dark h-100 d-flex flex-column"
               >
                 <Movies movie={movie.movie_id} />
               </Link>
