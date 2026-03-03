@@ -11,7 +11,7 @@ const MovieSchema = new mongoose.Schema({
   image: {
     type:String,
     default:"https://img.icons8.com/color/1200/broken-image.jpg"
-}});
+},
   averageRating: Number,
 });
 

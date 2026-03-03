@@ -10,9 +10,6 @@ export function FeedPage() {
   const [movies, setMovies] = useState([]);
   const [moviesToWatch, setMoviesToWatch] = useState([])
   const [selectedMovie, setSelectedMovie] = useState(null) //starting state is null, no movies selected
-
-export function FeedPage() {
-  const [movies, setMovies] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
