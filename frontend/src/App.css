@@ -40,3 +40,6 @@ html, body, #root {
     max-height: 535px;
     overflow-y: auto;
 }
+select, #resetFilter{
+  height: 2.5rem;
+}

@@ -17,6 +17,8 @@ export function BrowsingPage() {
   const [search, setSearch] = useState("");
   const [genre, setGenre] = useState("");
   const [year, setYear] = useState([0, currentYear]);
+  const [rating, setRating] = useState([0, 5]);
+  const [sortBy, setSortBy] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -38,12 +40,28 @@ export function BrowsingPage() {
   const filteredMovies = movies.filter(
   (movie) => {
     if(genre === ""){
-      return (Number(year[0]) <= movie.releaseYear && movie.releaseYear <= Number(year[1])) && (movie.title.toLowerCase().includes(search.toLowerCase()) || movie.director.toLowerCase().includes(search.toLowerCase()))
+      return (Number(year[0]) <= movie.releaseYear && movie.releaseYear <= Number(year[1])) && (Number(rating[0]) <= movie.averageRating && movie.averageRating < Number(rating[1])) && (movie.title.toLowerCase().includes(search.toLowerCase()) || movie.director.toLowerCase().includes(search.toLowerCase()))
     } else{
-      return (movie.genre.toLowerCase().includes(genre.toLowerCase())) && (Number(year[0]) <= movie.releaseYear && movie.releaseYear <= Number(year[1])) && (movie.title.toLowerCase().includes(search.toLowerCase()) || movie.director.toLowerCase().includes(search.toLowerCase()))
+      return (movie.genre.toLowerCase().includes(genre.toLowerCase())) && (Number(year[0]) <= movie.releaseYear && movie.releaseYear <= Number(year[1])) && (Number(rating[0]) <= movie.averageRating && movie.averageRating < Number(rating[1])) && (movie.title.toLowerCase().includes(search.toLowerCase()) || movie.director.toLowerCase().includes(search.toLowerCase()))
     }
   }
     );
+
+    const sortedMovies = [...filteredMovies].sort((a, b) => {
+      if (sortBy === "ratingDescending") {
+        return b.averageRating - a.averageRating;
+      }
+      if (sortBy === "ratingAscending") {
+        return a.averageRating - b.averageRating;
+      }
+      if (sortBy === "yearDescending") {
+        return b.releaseYear - a.releaseYear;
+      }
+      if (sortBy === "yearAscending") {
+        return a.releaseYear - b.releaseYear;
+      }
+      return 0;
+    });
 
   const token = localStorage.getItem("token");
   if (!token) {
@@ -56,7 +74,7 @@ export function BrowsingPage() {
       <h2 className="mb-1 Title text-warning">Browse Movies</h2>
       <p className="text-body-warning">Search or Filter for Movies</p>
       <form>
-        <div className="input-group mb-3">
+        <div className="input-group mb-1">
           <span className="input-group-text">Search</span>
           <input
             type="text"
@@ -84,6 +102,7 @@ export function BrowsingPage() {
           <option value="Indie">Indie</option>
           <option value="Adventure">Adventure</option>
           <option value="Comedy">Comedy</option>
+          <option value="Historic">Historic</option>
         </select>
         <select name="year" className="form-select w-25  m-2" aria-label="Default select example" onChange={(e) => setYear(e.target.value.split(','))}>
           <option selected disabled hidden>Year</option>
@@ -95,11 +114,28 @@ export function BrowsingPage() {
           <option value={[1980,1989]}>1980 - 1989</option>
           <option value={[1970,1979]}>1970 - 1979</option>
         </select>
-        <button class="btn btn-warning m-2">Clear Filters</button>
+        <select name="rating" className="form-select w-50  m-2" aria-label="Default select example" onChange={(e) => setRating(e.target.value.split(','))}>
+          <option selected disabled hidden>Average Rating</option>
+          <option value={[0,5]}>All</option>
+          <option value={[5,6]}>5</option>
+          <option value={[4,5]}>4 - 5</option>
+          <option value={[3,4]}>3 - 4</option>
+          <option value={[2,3]}>2 - 3</option>
+          <option value={[1,2]}>1 - 2</option>
+          <option value={[0,1]}>0 - 1</option>
+        </select>
+        <select className="form-select w-25 m-2" onChange={(e) => setSortBy(e.target.value)}>
+          <option value="">Sort By</option>
+          <option value="ratingDescending">Rating: High to Low</option>
+          <option value="ratingAscending">Rating: Low to High</option>
+          <option value="yearDescending">Release: Latest to Oldest</option>
+          <option value="yearAscending">Release: Oldest to Latest</option>
+        </select>
+        <button id='resetFilter' class="btn btn-warning m-2 w-25">Clear Filters</button>
         </div>
       </form>
       <div className="container row" id="scroll">
-        {filteredMovies.map((movie) => (
+        {sortedMovies.map((movie) => (
           <div className="col-12 col-sm-6 col-md-4 col-lg-3 mb-4"
           key={movie._id}> 
             <Link to={`/movies/${movie._id}`} className="text-decoration-none text-dark">
