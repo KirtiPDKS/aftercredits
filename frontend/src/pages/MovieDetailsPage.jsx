@@ -148,7 +148,7 @@ const handleWatchedToggle = async () => {
               <h5>Your Review</h5>
 
               <p>
-                <strong>Rating:</strong> {watchedEntry.rating?.toFixed(1)} / 5
+                <strong>Rating:</strong> {watchedEntry.rating} / 5
               </p>      
                  
               <p>{watchedEntry.review}</p>
@@ -193,20 +193,23 @@ const handleWatchedToggle = async () => {
             className="btn btn-warning" 
             key={movie.id}
             onClick={() => { setSelectedMovie(movie); setShowModal(true);}}
-            >
-              Leave Review 
+            >{watchedEntry?.review ? "Edit Review" : "Leave Review"}
+            
             </button>
               {showModal && selectedMovie && (
                 <MovieModal
+                  key={watchedEntry?._id ?? 'new'} // adding key to avoid timing issues with the modal component mounting and the details page loading i.e. if user clicks button before fetch from backend with prev review/rating data has happened it will force the modal to update when key is updated (once watchedEntry becomes available)
+                  existingReview={watchedEntry?.review ?? ''}
+                  existingRating={watchedEntry?.rating ?? 0}
                   movie={selectedMovie}
-                  onClose={(newEntry) => {
-                    setShowModal(false);
-                    if (newEntry) {
-                      setWatched(true);
-                      setWatchedEntry(newEntry);
-                      setInWatchlist(false)
-                    }
+                  onClose={() => setShowModal(false)}
+                  onSaved={(entry) => {
+                  setShowModal(false);
+                  setWatched(true);
+                  setWatchedEntry(entry);
+                  setInWatchlist(false);
                   }}
+            
                 />
               )}
           </div>
