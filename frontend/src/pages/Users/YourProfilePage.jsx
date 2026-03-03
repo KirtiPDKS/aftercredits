@@ -47,17 +47,19 @@ return <>
 <div>{user.image}</div>
 
 <h3>Movies Watched</h3>
-<div className="container row" >
+<div className="container mb-4" >
+    <div className="d-flex overflow-x-auto gap-3 align-items-stretch">
     {watchedMovies.filter((movie) => (movie.movie_id)).map((movie) => (
-        <div className="col-12 col-sm-6 col-md-4 col-lg-3 mb-4"
+        <div className="flex-shrink-0 d-flex"
         key={movie.movie_id._id}> 
-        <Link to={`/movies/${movie.movie_id._id}`} className="text-decoration-none text-dark">
+        <Link to={`/movies/${movie.movie_id._id}`} className="text-decoration-none text-dark h-100 d-flex flex-column">
             <Movies movie={movie.movie_id} />
         </Link>
         </div> 
     ))}
     </div>
-
+    </div>
+    
 <h3>Reviews</h3>
 <div>{watchedMovies.map((movie) => (
     (movie.review) && (

@@ -41,8 +41,9 @@ export function FeedPage() {
   return (
     <>
       <h2 className="mb-1">Movies</h2>
+
       <p className="text-body-secondary">Browse through all films.</p>
-      <div className="container  mb-4">
+      <div className="container  mb-4" >
         <div className="d-flex overflow-x-auto gap-3 align-items-stretch">
         {movies.map((movie) => (
           <div className="flex-shrink-0 d-flex"
@@ -56,8 +57,8 @@ export function FeedPage() {
       </div>
       </div>
 
-      <h2>Watch List</h2> 
-      <p>Films to watch </p>
+      <h5>For You</h5> 
+      <p className="text-body-secondary">Your watchlist. Click and leave a review on a film...</p>
 
     <div className="container mb-4 ">
         <div className="d-flex overflow-x-auto gap-3 align-items-stretch">
