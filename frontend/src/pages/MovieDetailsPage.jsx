@@ -1,5 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import MovieModal from "../components/MovieModal"
+import { formatDate } from "../utils/date";
 
 export function MovieDetailsPage() {
   const { id } = useParams();
@@ -8,6 +10,9 @@ export function MovieDetailsPage() {
   const [watched, setWatched] = useState(false);
   const [loadingWatchlist, setLoadingWatchlist] = useState(false);
   const [loadingWatched, setLoadingWatched] = useState(false);
+  const [showModal, setShowModal] = useState(false); // comments card popout hidden to start with
+  const [selectedMovie, setSelectedMovie] = useState(null) //starting state is null, no movies selected
+  const [watchedEntry, setWatchedEntry] = useState(null);
 
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -35,14 +40,19 @@ export function MovieDetailsPage() {
         setInWatchlist(isInWatchlist);
 
         // Check watched list
-        const watchedRes = await fetch(`${BACKEND_URL}/moviesWatched`, {
+        const watchedRes = await fetch(`${BACKEND_URL}/moviesWatched/me`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const watchedData = await watchedRes.json();
-        const isWatched = watchedData.movies.some(
-          (entry) => entry.movie_id === id
+        const matchingEntry = watchedData.movies?.find(
+          (entry) =>
+            entry.movie_id?._id?.toString() === id.toString() ||
+            entry.movie_id?.toString?.() === id.toString()
         );
-        setWatched(isWatched);
+
+setWatched(!!matchingEntry);
+setWatchedEntry(matchingEntry || null);
+
       } catch (err) {
         console.error(err);
       }
@@ -79,26 +89,35 @@ export function MovieDetailsPage() {
     }
   };
 
-  const handleWatchedToggle = async () => {
-    setLoadingWatched(true);
-    const token = localStorage.getItem("token");
+const handleWatchedToggle = async () => {
+  setLoadingWatched(true);
+  const token = localStorage.getItem("token");
 
-    try {
-      const method = watched ? "DELETE" : "POST";
-      const res = await fetch(`${BACKEND_URL}/moviesWatched/${id}`, {
-        method,
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const data = await res.json();
-      alert(data.message);
-      setWatched(!watched);
-    } catch (err) {
-      console.error(err);
-      alert("Error updating watched list");
-    } finally {
-      setLoadingWatched(false);
+  try {
+    const method = watched ? "DELETE" : "POST";
+    const res = await fetch(`${BACKEND_URL}/moviesWatched/${id}`, {
+      method,
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    const data = await res.json();
+    alert(data.message);
+
+    const newWatchedState = !watched;
+    setWatched(newWatchedState);
+    
+    if (!newWatchedState) {
+      setWatchedEntry(null);
     }
-  };
+
+  } catch (err) {
+    console.error(err);
+    alert("Error updating watched list");
+  } finally {
+    setLoadingWatched(false);
+    setInWatchlist(false);
+  }
+};
 
   return (
     <div className="container py-4">
@@ -122,7 +141,26 @@ export function MovieDetailsPage() {
           <p>
             <strong>Release Year:</strong> {displayOrUnknown(movie.releaseYear)}
           </p>
+          <p>
+            <strong>Average Rating:</strong> {displayOrUnknown(Number(movie.averageRating?.toFixed(1)))} / 5
+          </p>
           <p>{displayOrUnknown(movie.description)}</p>
+
+          {watchedEntry && watchedEntry.rating && (
+            <div className="card mt-4 p-3">
+              <h5>Your Review</h5>
+
+              <p>
+                <strong>Rating:</strong> {watchedEntry.rating} / 5
+              </p>      
+                 
+              <p>{watchedEntry.review}</p>
+          
+              <small className="text-muted">
+                Reviewed {formatDate(watchedEntry.createdAt)}
+              </small>
+            </div>
+          )}
 
           <div className="d-flex gap-3 mt-3">
             <button
@@ -153,9 +191,29 @@ export function MovieDetailsPage() {
                 : "Mark as Watched"}
             </button>
 
-            <button className="btn btn-warning" disabled>
-              Leave Review
+            <button 
+            className="btn btn-warning" 
+            key={movie.id}
+            onClick={() => { setSelectedMovie(movie); setShowModal(true);}}
+            >{watchedEntry?.review ? "Edit Review" : "Leave Review"}
+            
             </button>
+              {showModal && selectedMovie && (
+                <MovieModal
+                  key={watchedEntry?._id ?? 'new'} // adding key to avoid timing issues with the modal component mounting and the details page loading i.e. if user clicks button before fetch from backend with prev review/rating data has happened it will force the modal to update when key is updated (once watchedEntry becomes available)
+                  existingReview={watchedEntry?.review ?? ''}
+                  existingRating={watchedEntry?.rating ?? 0}
+                  movie={selectedMovie}
+                  onClose={() => setShowModal(false)}
+                  onSaved={(entry) => {
+                  setShowModal(false);
+                  setWatched(true);
+                  setWatchedEntry(entry);
+                  setInWatchlist(false);
+                  }}
+            
+                />
+              )}
           </div>
         </div>
       </div>

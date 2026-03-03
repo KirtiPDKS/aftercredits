@@ -13,16 +13,14 @@ const NavigationBar = ({loggedIn,setLoggedIn}) => {
       <div className="container-fluid d-flex justify-content-between align-items-center">
 
         {/* Logo */}
-        <a className="navbar-brand" href="/">
           <Logo loggedIn={loggedIn} />
-        </a>
 
         {/* Right side buttons */}
         <div className="d-flex align-items-center gap-3">
           {loggedIn && <Link className="nav-link" to="/users/all">All Users</Link>}
           {loggedIn && <Link className="nav-link" to="/browse">Browse</Link>}
           {loggedIn && <Link className="nav-link" to="/users/myprofile">Your Profile</Link>}
-          {loggedIn && <Link className="nav-link" to="/account">Account Settings</Link>}
+          {loggedIn && <Link className="nav-link" to="/users/myprofile/edit">Edit Account</Link>}
           {loggedIn && <LogoutButton onLogout={handleLogout} />}
         </div>
 

@@ -35,7 +35,7 @@ export function LoginPage() {
             <p className="mb-4 text-center">Login to your account:</p>
 
             <form onSubmit={handleSubmit}>
-              <div className="mb-3">
+              <div className="form-floating mb-3">
                 <input
                   id="user"
                   type="text"
@@ -44,9 +44,10 @@ export function LoginPage() {
                   onChange={(e) => setUser(e.target.value)}
                   placeholder="Email or Username"
                 />
+                <label htmlFor="user">Email or Username</label>
               </div>
 
-              <div className="mb-3">
+              <div className="form-floating mb-3">
                 <input
                   id="password"
                   type="password"
@@ -55,6 +56,7 @@ export function LoginPage() {
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Password"
                 />
+                <label htmlFor="password">Password</label>
               </div>
 
               <button type="submit" className="btn btn-warning w-100" role="submit-button">

@@ -1,5 +1,6 @@
 const MoviesWatched = require('../models/moviesWatched')
 const MoviesToWatch = require('../models/moviesToWatch')
+const Movies = require("../models/movies");
 const User = require("../models/user")
 const { generateToken } = require("../lib/token");
 
@@ -38,14 +39,38 @@ async function getMyWatchedMovies(req, res) {
 }
 
 async function createPost(req, res) {
-    const movie = new MoviesWatched({
-      ...req.body, //unpacks everything that arrives from the JSON stringify on front-end
-      user_id: req.user_id, 
-    });
-  await movie.save();
+  try {
+    const { movie_id } = req.body;
 
-  const newToken = generateToken(req.user_id);
-  res.status(201).json({ message: "Movie added to watched list", token: newToken });
+    const existing = await MoviesWatched.findOne({
+      user_id: req.user_id,
+      movie_id,
+    });
+
+    if (existing) {
+      const newToken = generateToken(req.user_id);
+      return res.status(409).json({
+        message: "Movie already in watched list",
+        token: newToken,
+      });
+    }
+
+    const movie = new MoviesWatched({
+      user_id: req.user_id,
+      movie_id,
+    });
+
+    await movie.save();
+
+    const newToken = generateToken(req.user_id);
+    res.status(201).json({
+      message: "Movie added to watched list",
+      token: newToken,
+    });
+
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
 }
 
 async function markAsWatched(req, res) {
@@ -53,6 +78,20 @@ async function markAsWatched(req, res) {
     const movie_id = req.params.movieId;
     const user_id = req.user_id;
 
+    const alreadyWatched = await MoviesWatched.findOne({
+      user_id,
+      movie_id,
+    });
+
+    if (alreadyWatched) {
+      const newToken = generateToken(user_id);
+      return res.status(409).json({
+        message: "Movie already marked as watched",
+        token: newToken,
+      });
+    }
+
+    // Remove from to-watch if exists
     await MoviesToWatch.findOneAndDelete({
       user_id,
       movie_id,
@@ -66,7 +105,10 @@ async function markAsWatched(req, res) {
     await watchedMovie.save();
 
     const newToken = generateToken(user_id);
-    res.status(200).json({ message: "Marked as watched", token: newToken });
+    res.status(200).json({
+      message: "Marked as watched",
+      token: newToken,
+    });
 
   } catch (error) {
     res.status(400).json({ message: "Error marking as watched" });
@@ -92,6 +134,7 @@ async function removeFromWatched(req, res) {
     }
 
     const newToken = generateToken(user_id);
+    await updateAverageRating(movie_id);
     res.status(200).json({
       message: "Movie removed from watched list",
       token: newToken,
@@ -103,12 +146,82 @@ async function removeFromWatched(req, res) {
   }
 }
 
+async function addOrUpdateReview(req, res) {
+  try {
+    const { rating, review } = req.body;
+    const movie_id = req.params.movieId;
+    const user_id = req.user_id;
+
+    // Prevent review text without rating
+    if (review && !rating) {
+      return res.status(400).json({
+        message: "Rating is required if leaving a written review"
+      });
+    }
+
+    let entry = await MoviesWatched.findOne({ user_id, movie_id });
+
+    // If not already watched, create entry
+    if (!entry) {
+      entry = new MoviesWatched({
+        user_id,
+        movie_id,
+        rating,
+        review
+      });
+    } else {
+      entry.rating = rating;
+      entry.review = review;
+    }
+
+    await entry.save();
+
+    await updateAverageRating(movie_id);
+
+    await MoviesToWatch.findOneAndDelete({
+      user_id,
+      movie_id,
+    });
+
+    const populated = await entry.populate("movie_id");
+
+    res.status(200).json({
+      message: "Review saved successfully",
+      entry: populated
+    });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+}
+
+async function updateAverageRating(movieId) {
+  const ratings = await MoviesWatched.find({
+    movie_id: movieId,
+    rating: { $ne: null }
+  });
+
+  let average = 0;
+
+  if (ratings.length > 0) {
+    const total = ratings.reduce((sum, r) => sum + r.rating, 0);
+    average = total / ratings.length;
+  }
+
+  await Movies.findByIdAndUpdate(movieId, {
+    averageRating: average
+  });
+}
+
 const moviesWatchedController = {
   getWatchedMovies: getWatchedMovies,
   createPost: createPost,
   markAsWatched: markAsWatched,
   getMyWatchedMovies:getMyWatchedMovies,
   removeFromWatched: removeFromWatched,
+  addOrUpdateReview: addOrUpdateReview,
+  updateAverageRating: updateAverageRating,
 };
 
 module.exports = moviesWatchedController;

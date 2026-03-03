@@ -12,6 +12,8 @@ const MovieSchema = new mongoose.Schema({
     type:String,
     default:"https://img.icons8.com/color/1200/broken-image.jpg"
 }});
+  averageRating: Number,
+});
 
 // We use the Schema to create the Movie model. Models are classes which we can
 // use to construct entries in our Database.

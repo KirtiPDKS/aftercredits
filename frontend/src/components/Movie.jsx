@@ -1,3 +1,4 @@
+
 function Movies(props) {
   const { movie } = props;
 
@@ -22,7 +23,10 @@ function Movies(props) {
           style={{backgroundColor:"transparent", fontSize:"0.75rem"}}>
             {movie.releaseYear} - {movie.genre.split(' ')[0]}
           </span>
-        </div>
+          <span className="badge bg-secondary">
+            {Number(movie.averageRating?.toFixed(1))}
+          </span>
+          </div>
     </article>
   );
 }

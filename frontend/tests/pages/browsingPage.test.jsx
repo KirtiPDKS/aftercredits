@@ -57,7 +57,7 @@ async function useFilterYear() {
 
   const userInput = screen.getByDisplayValue("Year");
 
-  await user.selectOptions(userInput, "last 20 Years");
+  await user.selectOptions(userInput, "2010 - 2019");
 }
 
 describe("Browsing Page", () => {
