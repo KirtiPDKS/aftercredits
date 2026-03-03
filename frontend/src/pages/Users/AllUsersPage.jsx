@@ -24,10 +24,8 @@ const AllUsersPage = () => {
 
 return (
   <div className="container mt-4">
-
-    {/* Page Header */}
     <div className="text-center mb-4">
-      <h2 className="fw-bold">Other Users</h2>
+      <h2 className="fw-bold Title text-warning">Other Users</h2>
       <p className="text-muted">
         Discover other members of the Community
       </p>
