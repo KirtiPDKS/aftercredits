@@ -8,6 +8,13 @@ html, body, #root {
   width: 100%;
   background-color: black;
 }
+body {
+  font-family: 'Archivo', 'Open Sans', sans-serif;
+  background-color: black; 
+  color: white; 
+}
+
+
 .Title{
   font-family:'Times New Roman', Times, serif;
   font-weight: bold;
@@ -39,4 +46,8 @@ html, body, #root {
 #scroll {
     max-height: 535px;
     overflow-y: auto;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
 }

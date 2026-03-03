@@ -8,7 +8,10 @@ const MovieSchema = new mongoose.Schema({
   releaseYear: Number,
   description: String,
   director: String,
-  image: String,
+  image: {
+    type:String,
+    default:"https://img.icons8.com/color/1200/broken-image.jpg"
+}});
   averageRating: Number,
 });
 

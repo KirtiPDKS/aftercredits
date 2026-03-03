@@ -65,6 +65,22 @@ return (
     </div>
     </div>
 
+
+//<h3>Movies Watched</h3>
+//<div className="container mb-4" >
+  //  <div className="d-flex overflow-x-auto gap-3 align-items-stretch">
+  //  {watchedMovies.filter((movie) => (movie.movie_id)).map((movie) => (
+   //     <div className="flex-shrink-0 d-flex"
+   //     key={movie.movie_id._id}> 
+    //    <Link to={`/movies/${movie.movie_id._id}`} className="text-decoration-none text-dark h-100 d-flex flex-column">
+     //       <Movies movie={movie.movie_id} />
+     //   </Link>
+     //   </div> 
+   // ))}
+   // </div>
+   // </div>
+    
+
     {/* Movies Watched Section */}
     <div className="card shadow-sm mb-4 p-4">
       <h4 className="mb-3">Movies Watched</h4>
