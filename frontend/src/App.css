@@ -59,3 +59,8 @@ select, #resetFilter{
     max-height: 320px;
     overflow-y: auto;
 }
+
+#usernameLink{
+  text-decoration: none;
+  color: white;
+}

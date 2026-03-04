@@ -1,5 +1,7 @@
 import { formatDate } from "../utils/date";
 import { StarRating } from "./starRating";
+import { Link } from "react-router-dom";
+import "../App.css"
 
 export function ReviewCard({ watchedEntry, heading, user }) {
   const image = user.profile_image
@@ -18,7 +20,9 @@ export function ReviewCard({ watchedEntry, heading, user }) {
                         className="rounded-circle me-2"
                         style={{ width: 32, height: 32, objectFit: "cover" }}
                     />
+                    <Link id="usernameLink" to={`/users/${user.username}`}>
                     <strong>{user.username}</strong>
+                    </Link>
                 </div>
             )}
             <div className="d-flex align-items-center gap-2 mb-1">
