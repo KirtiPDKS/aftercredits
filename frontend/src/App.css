@@ -47,6 +47,9 @@ body {
     max-height: 535px;
     overflow-y: auto;
 }
+select, #resetFilter{
+  height: 2.5rem;
+}
 
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
