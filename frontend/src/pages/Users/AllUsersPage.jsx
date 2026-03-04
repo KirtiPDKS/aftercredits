@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { getAllUsers } from "../../services/users";
 import User from "../../components/Users/User";
+import "../../App.css"
 
 const AllUsersPage = () => {
 
@@ -56,7 +57,7 @@ return (
         </p>
       </div>
     ) : (
-      <div className="row">
+      <div className="row"  id="scroll">
         {filteredUsers.map((user) => (
           <div
             key={user._id}
