@@ -1,10 +1,10 @@
 import { formatDate } from "../utils/date";
 import { StarRating } from "./starRating";
 
-
-const defaultAvatar = "https://png.pngtree.com/png-vector/20221130/ourmid/pngtree-user-profile-button-for-web-and-mobile-design-vector-png-image_41767880.jpg";
-
 export function ReviewCard({ watchedEntry, heading, user }) {
+  const image = user.profile_image
+    ? `${import.meta.env.VITE_BACKEND_URL}${user.profile_image}`
+    : "https://png.pngtree.com/png-vector/20221130/ourmid/pngtree-user-profile-button-for-web-and-mobile-design-vector-png-image_41767880.jpg";
     if (!watchedEntry) return "No reviews as yet.";
     return (
         <div className="rounded p-3 mt-3" style={{ backgroundColor: "#2e3843" }}>
@@ -13,7 +13,7 @@ export function ReviewCard({ watchedEntry, heading, user }) {
             {user && (
                 <div className="d-flex align-items-center mb-2">
                     <img
-                        src={user.profile_image || defaultAvatar}
+                        src={image}
                         alt={user.username}
                         className="rounded-circle me-2"
                         style={{ width: 32, height: 32, objectFit: "cover" }}
@@ -26,7 +26,6 @@ export function ReviewCard({ watchedEntry, heading, user }) {
                 <span>({watchedEntry.rating} / 5)</span>
             </div>
             <p>{watchedEntry.review}</p>
-
             <small className="text-muted">
                 Reviewed {formatDate(watchedEntry.createdAt)}
             </small>
