@@ -10,4 +10,5 @@ router.get("/name/:username", moviesWatchedController.getWatchedMovies);
 router.post("/:movieId", moviesWatchedController.markAsWatched);
 router.put("/:movieId/review", moviesWatchedController.addOrUpdateReview);
 router.delete("/:movieId", moviesWatchedController.removeFromWatched);
+router.get("/by-movie/:movieId", moviesWatchedController.getOtherUsersReviews);
 module.exports = router;
