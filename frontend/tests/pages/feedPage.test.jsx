@@ -6,6 +6,15 @@ import { FeedPage } from "../../src/pages/Feed/FeedPage";
 import { getMovies } from "../../src/services/movies";
 import { getWatchList } from "../../src/services/moviesToWatch";
 
+beforeEach(() => {
+  vi.spyOn(globalThis, "fetch");
+  window.localStorage.setItem("token", "fake-token");
+});
+
+afterEach(() => {
+  vi.restoreAllMocks();
+});
+
 
 // Mocking movies
 vi.mock("../../src/services/movies", () => ({

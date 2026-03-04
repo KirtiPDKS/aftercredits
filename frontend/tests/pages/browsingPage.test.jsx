@@ -8,6 +8,15 @@ import { BrowsingPage } from "../../src/pages/Browsing/BrowsingPage";
 import { LoginPage } from "../../src/pages/Login/LoginPage"
 import { getMovies } from "../../src/services/movies";
 
+beforeEach(() => {
+  vi.spyOn(globalThis, "fetch");
+  window.localStorage.setItem("token", "fake-token");
+});
+
+afterEach(() => {
+  vi.restoreAllMocks();
+});
+
 vi.mock("../../src/services/movies", () => ({
   getMovies: vi.fn(),
 }));
@@ -79,6 +88,7 @@ describe("Browsing Page", () => {
           description: "This is a test film",
           image: "",
           director: "Test Guy",
+          averageRating: 4.2
         },
       ],
       token: "newToken",
@@ -107,6 +117,7 @@ describe("Browsing Page", () => {
           description: "This is a test film",
           image: "",
           director: "Test Guy",
+          averageRating: 4.2
         },
         {
           _id: "123456",
@@ -116,6 +127,7 @@ describe("Browsing Page", () => {
           description: "This is a test film",
           image: "",
           director: "Damien Chazelle",
+          averageRating: 4.5
         },
       ],
       token: "newToken",
@@ -146,6 +158,7 @@ test("It displays the correct movie corrisponding with whats been searched, by p
           description: "This is a test film",
           image: "",
           director: "Test Guy",
+          averageRating: 4.2
         },
         {
           _id: "123456",
@@ -155,6 +168,7 @@ test("It displays the correct movie corrisponding with whats been searched, by p
           description: "This is a test film",
           image: "",
           director: "Damien Chazelle",
+          averageRating: 4.5
         },
       ],
       token: "newToken",
@@ -185,6 +199,7 @@ test("It displays the correct movie corrisponding with whats been searched, by p
           description: "This is a test film",
           image: "",
           director: "Test Guy",
+          averageRating: 4.2
         },
         {
           _id: "123456",
@@ -194,6 +209,7 @@ test("It displays the correct movie corrisponding with whats been searched, by p
           description: "This is a test film",
           image: "",
           director: "Damien Chazelle",
+          averageRating: 4.5
         },
       ],
       token: "newToken",
@@ -224,6 +240,7 @@ test("It displays the correct movie corrisponding with whats been searched, by p
           description: "This is a test film",
           image: "",
           director: "Test Guy",
+          averageRating: 4.2
         },
         {
           _id: "123456",
@@ -233,6 +250,7 @@ test("It displays the correct movie corrisponding with whats been searched, by p
           description: "This is a test film",
           image: "",
           director: "Damien Chazelle",
+          averageRating: 4.5
         },
       ],
       token: "newToken",
@@ -263,6 +281,7 @@ test("It displays the correct movie corrisponding with whats been searched, by p
         description: "This is a test film",
         image: "",
         director: "Test Guy",
+        averageRating: 4.2
       },
       {
         _id: "123456",
@@ -272,6 +291,7 @@ test("It displays the correct movie corrisponding with whats been searched, by p
         description: "This is a test film",
         image: "",
         director: "Damien Chazelle",
+        averageRating: 4.5
       },
     ],
     token: "newToken",
@@ -302,6 +322,7 @@ test("It displays the correct movie corrisponding with what year filter has been
         description: "This is a test film",
         image: "",
         director: "Test Guy",
+        averageRating: 4.2
       },
       {
         _id: "123456",
@@ -311,6 +332,7 @@ test("It displays the correct movie corrisponding with what year filter has been
         description: "This is a test film",
         image: "",
         director: "Damien Chazelle",
+        averageRating: 4.5
       },
     ],
     token: "newToken",
@@ -341,6 +363,7 @@ test("It displays the correct movie when all filters and search is used together
         description: "This is a test film",
         image: "",
         director: "Test Guy",
+        averageRating: 4.2
       },
       {
         _id: "123456",
@@ -350,6 +373,7 @@ test("It displays the correct movie when all filters and search is used together
         description: "This is a test film",
         image: "",
         director: "Damien Chazelle",
+        averageRating: 4.5
       },
     ],
     token: "newToken",
