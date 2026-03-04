@@ -1,23 +1,3 @@
-const localStorageMock = (() => {
-  let store = {};
-
-  return {
-    getItem: vi.fn((key) => store[key] ?? null),
-    setItem: vi.fn((key, value) => {
-      store[key] = value.toString();
-    }),
-    removeItem: vi.fn((key) => {
-      delete store[key];
-    }),
-    clear: vi.fn(() => {
-      store = {};
-    }),
-  };
-})();
-
-Object.defineProperty(window, "localStorage", {
-  value: localStorageMock,
-});
 
 import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
@@ -132,9 +112,15 @@ test("adds movie to watchlist", async () => {
 });
 
 test("removes movie from watchlist if already added", async () => {
-  mockInitialFetches({
-    watchlistMovies: [{ movie_id: "123" }],
-  });
+ mockInitialFetches({
+  watchedMovies: [
+    {
+      movie_id: { _id: "123" },
+      rating: 4,
+      review: "Great film"
+    }
+  ]
+});
 
   // Mock DELETE toggle
   fetch.mockResolvedValueOnce({

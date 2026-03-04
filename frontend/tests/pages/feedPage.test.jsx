@@ -1,13 +1,8 @@
+// FeedPage.test.jsx
 import { render, screen, waitFor } from "@testing-library/react";
 import { vi } from "vitest";
 import "@testing-library/jest-dom";
 
-import { FeedPage } from "../../src/pages/Feed/FeedPage";
-import { getMovies } from "../../src/services/movies";
-import { getWatchList } from "../../src/services/moviesToWatch";
-
-
-// Mocking movies
 vi.mock("../../src/services/movies", () => ({
   getMovies: vi.fn(),
 }));
@@ -16,7 +11,6 @@ vi.mock("../../src/services/moviesToWatch", () => ({
   getWatchList: vi.fn(),
 }));
 
-// Mocking components
 vi.mock("../../src/components/LogoutButton", () => ({
   default: () => <button>Logout</button>,
 }));
@@ -35,9 +29,8 @@ vi.mock("../../src/components/MovieModal", () => ({
   default: () => <div>Movie Modal</div>,
 }));
 
-// Mock react-router-dom
+// Mock react-router-dom 
 const navigateMock = vi.fn();
-
 vi.mock("react-router-dom", async () => {
   const actual = await vi.importActual("react-router-dom");
   return {
@@ -47,22 +40,44 @@ vi.mock("react-router-dom", async () => {
   };
 });
 
-describe("FeedPage", () => {
-  beforeEach(() => {
-    window.localStorage.clear();
-    navigateMock.mockClear();
-  });
+import { FeedPage } from "../../src/pages/Feed/FeedPage";
+import { getMovies } from "../../src/services/movies";
+import { getWatchList } from "../../src/services/moviesToWatch";
 
-  // Successful fetch
+// localStorage mock
+let storage = {};
+Object.defineProperty(window, "localStorage", {
+  value: {
+    getItem: vi.fn((key) => storage[key] || null),
+    setItem: vi.fn((key, value) => {
+      storage[key] = value;
+    }),
+    removeItem: vi.fn((key) => {
+      delete storage[key];
+    }),
+    clear: vi.fn(() => {
+      storage = {};
+    }),
+  },
+  writable: true,
+});
+
+beforeEach(() => {
+  window.localStorage.clear();
+  navigateMock.mockClear();
+  vi.clearAllMocks();
+});
+
+describe("FeedPage", () => {
+
   test("displays movies from backend", async () => {
     window.localStorage.setItem("token", "testToken");
 
-    const mockMovies = [{ _id: "12345", title: "Test Movie", genre: "Comedy", releaseYear:2000,description:"This is a test film", image:"" }];
+    const mockMovies = [
+      { _id: "12345", title: "Test Movie", genre: "Comedy", releaseYear: 2000, description: "This is a test film", image: "" },
+    ];
 
-    getMovies.mockResolvedValue({
-      movies: mockMovies,
-      token: "newToken",
-    });
+    getMovies.mockResolvedValue({ movies: mockMovies, token: "newToken" });
     getWatchList.mockResolvedValue({ movies: [] });
 
     render(<FeedPage />);
@@ -76,14 +91,12 @@ describe("FeedPage", () => {
       expect(localStorage.getItem("token")).toEqual("newToken");
     });
   });
-  // No token present
 
   test("navigates to login if no token is present", () => {
     render(<FeedPage />);
     expect(navigateMock).toHaveBeenCalledWith("/login");
   });
 
-  // API failure
   test("navigates to login if API call fails", async () => {
     window.localStorage.setItem("token", "testToken");
 
@@ -97,48 +110,44 @@ describe("FeedPage", () => {
   });
 
   test("displays user's watchlist movies", async () => {
-  window.localStorage.setItem("token", "testToken");
+    window.localStorage.setItem("token", "testToken");
 
-  // Minimal movies list, so main movies don't interfere
-  getMovies.mockResolvedValue({ movies: [], token: "mainToken" });
+    // Main movies empty
+    getMovies.mockResolvedValue({ movies: [], token: "mainToken" });
 
-  // Watchlist movies
-  const mockWatchlist = [
-    {
-      _id: "wl1",
-      movie_id: {
-        _id: "m1",
-        title: "Watchlist Movie 1",
-        releaseYear: 2010,
-        description: "First watchlist movie",
+    // Watchlist movies
+    const mockWatchlist = [
+      {
+        _id: "wl1",
+        movie_id: {
+          _id: "m1",
+          title: "Watchlist Movie 1",
+          releaseYear: 2010,
+          description: "First watchlist movie",
+        },
       },
-    },
-    {
-      _id: "wl2",
-      movie_id: {
-        _id: "m2",
-        title: "Watchlist Movie 2",
-        releaseYear: 2015,
-        description: "Second watchlist movie",
+      {
+        _id: "wl2",
+        movie_id: {
+          _id: "m2",
+          title: "Watchlist Movie 2",
+          releaseYear: 2015,
+          description: "Second watchlist movie",
+        },
       },
-    },
-  ];
+    ];
 
-  getWatchList.mockResolvedValue({ movies: mockWatchlist });
+    getWatchList.mockResolvedValue({ movies: mockWatchlist });
 
-  render(<FeedPage />);
+    render(<FeedPage />);
 
-  // Check that both watchlist movies appear
-  expect(await screen.findByText("Watchlist Movie 1")).toBeInTheDocument();
-  expect(screen.getByText("2010")).toBeInTheDocument();
-  expect(screen.getByText("First watchlist movie")).toBeInTheDocument();
+    expect(await screen.findByText("Watchlist Movie 1")).toBeInTheDocument();
+    expect(screen.getByText("2010")).toBeInTheDocument();
+    expect(screen.getByText("First watchlist movie")).toBeInTheDocument();
 
-  expect(await screen.findByText("Watchlist Movie 2")).toBeInTheDocument();
-  expect(screen.getByText("2015")).toBeInTheDocument();
-  expect(screen.getByText("Second watchlist movie")).toBeInTheDocument();
-});
-
-
+    expect(await screen.findByText("Watchlist Movie 2")).toBeInTheDocument();
+    expect(screen.getByText("2015")).toBeInTheDocument();
+    expect(screen.getByText("Second watchlist movie")).toBeInTheDocument();
+  });
 
 });
-

@@ -9,21 +9,24 @@ vi.mock("../../src/services/users");
 vi.mock("../../src/services/moviesWatched");
 
 describe("EditYourDetailsPage", () => {
-  beforeEach(() => {
-    localStorage.setItem("token", "fake-token");
-    global.fetch = vi.fn();
-  });
-  
+beforeEach(() => {
+  vi.spyOn(globalThis, "fetch");
+  localStorage.setItem("token", "fake-token");
+});
 
 it("loads and displays user data", async () => {
-    getCurrentUser.mockResolvedValue({
+    fetch.mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({
         user: {
           username: "testuser",
           email: "test@test.com",
           profile_image: "image.jpg"
-        }
+        },
+        token: "fake-token"
+      })
+      
     });
-
     render(
       <BrowserRouter>
         <EditYourDetailsPage />
