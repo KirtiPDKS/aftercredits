@@ -9,7 +9,7 @@ const Logo = ({loggedIn}) => {
       to={pageRef}
       className="navbar-brand fw-bold fs-3 text-decoration-none text-warning Title"
     >
-      Aftercredits
+      AfterCredits
     </Link>
     );
 };
