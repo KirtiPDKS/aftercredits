@@ -2,6 +2,8 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { ReviewCard } from "../components/ReviewCard";
 import MovieModal from "../components/MovieModal"
+import { getCurrentUser} from "../services/users";
+import "../App.css"
 
 
 export function MovieDetailsPage() {
@@ -19,9 +21,21 @@ export function MovieDetailsPage() {
 
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
+  const [user, setUser] = useState(null)
   // Fetch movie details and check status
   useEffect(() => {
     const token = localStorage.getItem("token");
+
+  getCurrentUser(token)
+      .then((data) => {
+          setUser(data.user);
+          if(data.token){
+          localStorage.setItem("token", data.token);
+          }
+      })
+      .catch((err) => {
+          console.error(err);
+      });
 
     async function fetchMovie() {
       try {
@@ -198,6 +212,7 @@ export function MovieDetailsPage() {
 
             </button>
           </div>
+          <div id="scroll-reveiws">
 
           {/* REVIEW CARDS - LOGGED IN USER + OTHER USERS  */}
 
@@ -207,7 +222,8 @@ export function MovieDetailsPage() {
             <>
               <ReviewCard
                 watchedEntry={watchedEntry}
-                heading="Your Review" />
+                heading="Your Review" 
+                user={user} />
             </>
           )}
 
@@ -262,6 +278,7 @@ export function MovieDetailsPage() {
                 }}
 
               />)}
+          </div>
           </div>
 
         </div>
