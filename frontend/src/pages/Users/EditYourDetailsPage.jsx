@@ -53,8 +53,8 @@ password.includes(num.toString())
     e.preventDefault();
     if (email.includes('@') && email.includes('.')){
       const formData = new FormData();
-      formData.append("username", username);
-      formData.append("email", email);
+      formData.append("username", username.toLowerCase());
+      formData.append("email", email.toLowerCase());
 
       if (imageFile) {
         formData.append("profile_image", imageFile);

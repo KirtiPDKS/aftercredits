@@ -13,7 +13,7 @@ export function LoginPage() {
   async function handleSubmit(event) {
     event.preventDefault();
     try {
-      const token = await login(user, password);
+      const token = await login(user.toLowerCase(), password);
       localStorage.setItem("token", token);
 
       setLoggedIn(true);
