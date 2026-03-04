@@ -3,13 +3,14 @@ import { StarRating } from "./starRating";
 import { Link } from "react-router-dom";
 import "../App.css"
 
-export function ReviewCard({ watchedEntry, heading, user }) {
+export function ReviewCard({ watchedEntry, heading, user, margin }) {
   const image = user.profile_image
     ? `${import.meta.env.VITE_BACKEND_URL}${user.profile_image}`
     : "https://png.pngtree.com/png-vector/20221130/ourmid/pngtree-user-profile-button-for-web-and-mobile-design-vector-png-image_41767880.jpg";
     if (!watchedEntry) return "No reviews as yet.";
+    const divClassName = "rounded p-3 mt-"+margin
     return (
-        <div className="rounded p-3 mt-3" style={{ backgroundColor: "#2e3843" }}>
+        <div className={divClassName} style={{ backgroundColor: "#2e3843" }}>
             <h5>{heading}</h5>
 
             {user && (
