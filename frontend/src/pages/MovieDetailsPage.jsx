@@ -212,7 +212,7 @@ export function MovieDetailsPage() {
 
             </button>
           </div>
-          <div id="scroll-reveiws">
+          <div className="mt-3" id="scroll-reveiws">
 
           {/* REVIEW CARDS - LOGGED IN USER + OTHER USERS  */}
 
@@ -223,7 +223,9 @@ export function MovieDetailsPage() {
               <ReviewCard
                 watchedEntry={watchedEntry}
                 heading="Your Review" 
-                user={user} />
+                user={user}
+                margin={0}
+                />
             </>
           )}
 
@@ -255,6 +257,7 @@ export function MovieDetailsPage() {
                       watchedEntry={entry}
                       label={entry.user_id?.username}
                       user={entry.user_id}
+                      margin={3}
                     />
                   ))
                 )}
