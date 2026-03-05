@@ -53,7 +53,6 @@ export function MovieDetailsPage() {
         });
         const otherData = await reviewsRes.json();
         if (otherData.reviews) setOtherReviews(otherData.reviews);
-        if (otherData.reviews) setOtherReviews(otherData.reviews);
         setLoadingOtherReviews(false);
 
 
@@ -62,8 +61,9 @@ export function MovieDetailsPage() {
           headers: { Authorization: `Bearer ${token}` },
         });
         const watchlistData = await watchlistRes.json();
-        const isInWatchlist = watchlistData.movies.some(
-          (entry) => entry.movie_id === id
+        const isInWatchlist = watchlistData.movies.some((entry) =>
+          entry.movie_id?.toString() === id.toString() ||
+          entry.movie_id?._id?.toString() === id.toString()
         );
         setInWatchlist(isInWatchlist);
 
