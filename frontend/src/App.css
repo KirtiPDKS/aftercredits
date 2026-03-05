@@ -66,6 +66,7 @@ select, #resetFilter{
 #scroll-home{
     max-height: 80vh;
     overflow-y: auto;
+}
   
 .follow-button {
   background-color: transparent; 
