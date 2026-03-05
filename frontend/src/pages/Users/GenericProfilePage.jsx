@@ -18,9 +18,9 @@ const [watchedMovies, setWatchedMovies] = useState([])
 const [Image, setImage] = useState(null);
 const [isFollowing, setisFollowing] = useState(false)
 const [followerCount, setFollowerCount] = useState(0)
-const [followingCount, setFollowingCount] = useState(null)
-const [followers, setFollowers] = useState(null)
-const [following, setFollowing] = useState(null)
+const [followingCount, setFollowingCount] = useState(0)
+const [followers, setFollowers] = useState([])
+const [following, setFollowing] = useState([])
 
     useEffect(() => {
     const token = localStorage.getItem("token");
@@ -30,7 +30,6 @@ const [following, setFollowing] = useState(null)
     }
     
     getCurrentUser(token).then((data)=> {
-        console.log(username, data.user.username)
         if (username == data.user.username) {
         navigate("/users/myprofile", { replace: true })
         return 
@@ -42,7 +41,6 @@ const [following, setFollowing] = useState(null)
             setisFollowing(data.isFollowing);
             setFollowerCount(data.followers);
             setFollowingCount(data.following);
-
             if (data.user.profile_image) {
             setImage(
             `${import.meta.env.VITE_BACKEND_URL}${data.user.profile_image}`
@@ -58,8 +56,10 @@ const [following, setFollowing] = useState(null)
     ]);
   })
   .then(([followersData, followingData]) => {
+    console.log(followingData)
     setFollowers(followersData.followers);
     setFollowing(followingData.following);
+    console.log(followersData)
   })
         .catch((err) => {
             console.error(err);
@@ -93,9 +93,9 @@ return (
       )}
     <h2 className="mb-0">{user.username}</h2>
      <span><FollowButton userId={user._id} initiallyFollowing={isFollowing}/></span>
-     <span class="text-primary" style={{cursor:"pointer"}} data-bs-toggle="modal" data-bs-target="#FollowerModal">
+     <span className="text-primary" style={{cursor:"pointer"}} data-bs-toggle="modal" data-bs-target="#FollowerModal">
       {followerCount} Followers</span>
-     <span class="text-primary" style={{cursor:"pointer"}} data-bs-toggle="modal" data-bs-target="#FollowingModal">
+     <span className="text-primary" style={{cursor:"pointer"}} data-bs-toggle="modal" data-bs-target="#FollowingModal">
       {followingCount} Following</span>
     </div>
    
@@ -108,10 +108,10 @@ return (
     {watchedMovies.length === 0 ? (
         <p className="text-muted">No movies watched yet.</p>
     ) : (
-        <div className="row">
+        <div className="d-flex overflow-x-auto gap-3 align-items-stretch">
         {watchedMovies.map((movie) => (
             <div
-            className="flex-shrink-0 d-flex"
+            className="flex-shrink-0 d-flex h-100"
             key={movie.movie_id._id}
             >
             <Link

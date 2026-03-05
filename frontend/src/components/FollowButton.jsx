@@ -15,7 +15,7 @@ function FollowButton({userId, initiallyFollowing}) {
     }
 
 } 
-return <button onClick={handleClick}>{isFollowing? "Unfollow" :"Follow"} </button> 
+return <button className="follow-button" onClick={handleClick}>{isFollowing? "Unfollow" :"Follow"} </button> 
 }
 
 export default FollowButton; 

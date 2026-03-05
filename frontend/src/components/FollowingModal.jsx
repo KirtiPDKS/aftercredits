@@ -24,8 +24,8 @@ export default function FollowingModal({ following }) {
             {following && following.length > 0 ? (
               <ul className="list-group">
                 {following.map((user) => (
-                  <li key={user._id} className="list-group-item">
-                    {user.username}
+                  <li key={user.following_id._id} className="list-group-item">
+                    {user.following_id.username}
                   </li>
                 ))}
               </ul>
