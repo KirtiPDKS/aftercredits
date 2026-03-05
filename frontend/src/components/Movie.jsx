@@ -1,6 +1,6 @@
 
 function Movies(props) {
-  const { movie } = props;
+  const { movie, img_height ="224px" } = props;
 
   return (
     <article className="card h-100 d-flex flex-column" style={{width:"100%", backgroundColor:"transparent", border:"None"}}>
@@ -9,7 +9,7 @@ function Movies(props) {
           src={movie.image}
           alt={`${movie.title} poster`}
           className="card-img-top"
-          style={{width:"100%",height:"224px",objectFit:"cover", borderRadius:"0"}}
+          style={{width:"100%",height:img_height,objectFit:"cover",objectPosition:"top", borderRadius:"0"}}
           onError={(e) => {
           e.target.onerror = null; // prevents infinite loop
           e.target.src = "https://img.icons8.com/color/1200/broken-image.jpg";
