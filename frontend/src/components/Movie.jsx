@@ -28,9 +28,17 @@ function Movies(props) {
           style={{backgroundColor:"transparent", fontSize:"0.75rem"}}>
             {movie.releaseYear} - {movie.genre.split(' ')[0]}
           </span>
-          <span className="badge bg-secondary">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginTop: '4px' }}>
+            {/* star rating */}
+          <span style={{ color: '#ffc107', fontSize: '1rem', textShadow: '0 0 6px rgba(255, 193, 7, 0.8), 0 0 16px rgba(255, 193, 7, 0.4)'}}>★</span>
+          <span style={{ color: '#fff', fontWeight: 'bold', fontSize: '0.95rem' }}>
             {Number(movie.averageRating?.toFixed(1))}
           </span>
+          <span style={{ color: '#888', fontSize: '0.75rem' }}>/5</span>
+        </div>
+          {/* <span className="badge bg-secondary">
+            {Number(movie.averageRating?.toFixed(1))}/5
+          </span> */}
           </div>
     </article>
   );
