@@ -25,7 +25,7 @@ export default function FollowingModal({ following }) {
             {following && following.length > 0 ? (
               <ul className="list-group">
                 {following.map((user) => (
-                  <a id="usernameLink" href={`/users/${follower.follower_id.username}`}>
+                  <a id="usernameLink" href={`/users/${user.following_id.username}`}>
                   <li key={user.following_id._id} className="list-group-item">
                     {user.following_id.username}
                   </li>
