@@ -75,7 +75,9 @@ async function updateCurrentUser(req, res) {
 
     if (req.file) {
       updateData.profile_image = `/uploads/${req.file.filename}`;
-    }
+    } else if (req.body.profile_image) {
+      updateData.profile_image = req.body.profile_image;
+    }    
 
       const updatedUser = await User.findByIdAndUpdate(
       req.user_id,

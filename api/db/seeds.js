@@ -238,7 +238,7 @@ const movies = [
       "Perchance is an independent drama following two strangers who form an unlikely connection over a single night in a quiet coastal town. As conversations unfold, hidden regrets and unrealized dreams surface, forcing both to confront the paths they’ve chosen. The film is noted for its intimate performances and minimalist storytelling.",
     director: "Ava Laurent",
     image:
-      "https://www.imdb.com/title/tt5858744/mediaviewer/rm355937024/?ref_=tt_ov_i",
+      "https://m.media-amazon.com/images/M/MV5BN2YzMTJiMzItNDQzZi00MzFmLTlmOGYtYmJkNWQ1ZjU0MGYzXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",
     averageRating: 3
 },
 ];

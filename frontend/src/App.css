@@ -40,7 +40,20 @@ html, body, #root {
     max-height: 80vh;
     overflow-y: auto;
 }
+select, #resetFilter{
+  height: 2.5rem;
+}
 
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
+}
+
+#scroll-reveiws {
+    max-height: 320px;
+    overflow-y: auto;
+}
+
+#usernameLink{
+  text-decoration: none;
+  color: white;
 }

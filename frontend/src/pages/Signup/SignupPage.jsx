@@ -20,7 +20,7 @@ export function SignupPage() {
     if (password.length >= 8 === true && password.toLowerCase() !== password && hasNumber === true){
       if (email.includes('@') && email.includes('.')){
       try{
-      await signup(email,username, password);
+      await signup(email.toLowerCase(),username.toLowerCase(), password);
       navigate("/login");
     } catch (err) {
       console.error(err);

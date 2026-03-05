@@ -5,37 +5,37 @@ const User = require("../models/user")
 const { generateToken } = require("../lib/token");
 
 async function getWatchedMovies(req, res) {
-  try{
+  try {
     let userId
-  if(req.params.username){
-  const username = req.params.username
-  const user = await User.findOne({username:username})
-  if(!user){
-    return res.status(404).json({message:"Not found any user"})
+    if (req.params.username) {
+      const username = req.params.username
+      const user = await User.findOne({ username: username })
+      if (!user) {
+        return res.status(404).json({ message: "Not found any user" })
+      }
+      userId = user._id;
+    }
+    else {
+      return res.status(400).json({ message: "No user defined" })
+    }
+    const movies = await MoviesWatched.find({ user_id: userId }).populate("movie_id");
+    return res.status(200).json({ message: "Successfully got movies", movies: movies })
   }
-  userId = user._id;
-}
-else{
-  return res.status(400).json({message:"No user defined"})
-}
-  const movies = await MoviesWatched.find({user_id:userId}).populate("movie_id");
-  return res.status(200).json({message:"Successfully got movies",movies:movies})
+  catch (error) {
+    return res.status(500).json({ message: "Server error" })
   }
-  catch(error){
-    return res.status(500).json({message: "Server error"})
-  }
-  
+
 }
 
 async function getMyWatchedMovies(req, res) {
-  try{
-  const movies = await MoviesWatched.find({user_id:req.user_id}).populate("movie_id");
-  return res.status(200).json({message:"Successfully got movies",movies:movies})
+  try {
+    const movies = await MoviesWatched.find({ user_id: req.user_id }).populate("movie_id");
+    return res.status(200).json({ message: "Successfully got movies", movies: movies })
   }
-  catch(error){
-    return res.status(500).json({message: "Unable to get movies"})
+  catch (error) {
+    return res.status(500).json({ message: "Unable to get movies" })
   }
-  
+
 }
 
 async function createPost(req, res) {
@@ -214,14 +214,37 @@ async function updateAverageRating(movieId) {
   });
 }
 
+
+async function getOtherUsersReviews(req, res) {
+
+  try {
+    const movieIdFromURL = req.params.movieId;
+    const moviesUsersWatched = await MoviesWatched.find({
+      movie_id: movieIdFromURL,
+      user_id: { $ne: req.user_id },
+      review: { $exists: true, $nin: [null, ""] }
+    }).populate("user_id", "username profile_image"); //$ne is a MongoDB query operator, meaning not equal
+    return res.status(200).json({
+      message: "Successfully got reviews from other users", reviews: moviesUsersWatched
+    })
+  }
+  catch (error) {
+    return res.status(500).json({ message: "Server error" })
+  }
+
+}
+
+
+
 const moviesWatchedController = {
   getWatchedMovies: getWatchedMovies,
   createPost: createPost,
   markAsWatched: markAsWatched,
-  getMyWatchedMovies:getMyWatchedMovies,
+  getMyWatchedMovies: getMyWatchedMovies,
   removeFromWatched: removeFromWatched,
   addOrUpdateReview: addOrUpdateReview,
   updateAverageRating: updateAverageRating,
+  getOtherUsersReviews: getOtherUsersReviews,
 };
 
 module.exports = moviesWatchedController;

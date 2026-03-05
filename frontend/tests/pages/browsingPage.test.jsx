@@ -60,6 +60,14 @@ async function useFilterYear() {
   await user.selectOptions(userInput, "2010 - 2019");
 }
 
+async function useFilterRating() {
+  const user = userEvent.setup();
+
+  const userInput = screen.getByDisplayValue("Average Rating");
+
+  await user.selectOptions(userInput, "4 - 5");
+}
+
 describe("Browsing Page", () => {
   beforeEach(() => {
     window.localStorage.clear();
@@ -79,6 +87,7 @@ describe("Browsing Page", () => {
           description: "This is a test film",
           image: "",
           director: "Test Guy",
+          averageRating: 4.4
         },
       ],
       token: "newToken",
@@ -107,6 +116,7 @@ describe("Browsing Page", () => {
           description: "This is a test film",
           image: "",
           director: "Test Guy",
+          averageRating: 4.4
         },
         {
           _id: "123456",
@@ -116,6 +126,7 @@ describe("Browsing Page", () => {
           description: "This is a test film",
           image: "",
           director: "Damien Chazelle",
+          averageRating: 4.4
         },
       ],
       token: "newToken",
@@ -146,6 +157,7 @@ test("It displays the correct movie corrisponding with whats been searched, by p
           description: "This is a test film",
           image: "",
           director: "Test Guy",
+          averageRating: 4.4
         },
         {
           _id: "123456",
@@ -155,6 +167,7 @@ test("It displays the correct movie corrisponding with whats been searched, by p
           description: "This is a test film",
           image: "",
           director: "Damien Chazelle",
+          averageRating: 4.4
         },
       ],
       token: "newToken",
@@ -185,6 +198,7 @@ test("It displays the correct movie corrisponding with whats been searched, by p
           description: "This is a test film",
           image: "",
           director: "Test Guy",
+          averageRating: 4.4
         },
         {
           _id: "123456",
@@ -194,6 +208,7 @@ test("It displays the correct movie corrisponding with whats been searched, by p
           description: "This is a test film",
           image: "",
           director: "Damien Chazelle",
+          averageRating: 4.4
         },
       ],
       token: "newToken",
@@ -224,6 +239,7 @@ test("It displays the correct movie corrisponding with whats been searched, by p
           description: "This is a test film",
           image: "",
           director: "Test Guy",
+          averageRating: 4.4
         },
         {
           _id: "123456",
@@ -233,6 +249,7 @@ test("It displays the correct movie corrisponding with whats been searched, by p
           description: "This is a test film",
           image: "",
           director: "Damien Chazelle",
+          averageRating: 4.4
         },
       ],
       token: "newToken",
@@ -263,6 +280,7 @@ test("It displays the correct movie corrisponding with whats been searched, by p
         description: "This is a test film",
         image: "",
         director: "Test Guy",
+        averageRating: 4.4
       },
       {
         _id: "123456",
@@ -272,6 +290,7 @@ test("It displays the correct movie corrisponding with whats been searched, by p
         description: "This is a test film",
         image: "",
         director: "Damien Chazelle",
+        averageRating: 4.4
       },
     ],
     token: "newToken",
@@ -302,6 +321,7 @@ test("It displays the correct movie corrisponding with what year filter has been
         description: "This is a test film",
         image: "",
         director: "Test Guy",
+        averageRating: 4.4
       },
       {
         _id: "123456",
@@ -311,6 +331,7 @@ test("It displays the correct movie corrisponding with what year filter has been
         description: "This is a test film",
         image: "",
         director: "Damien Chazelle",
+        averageRating: 4.4
       },
     ],
     token: "newToken",
@@ -323,6 +344,47 @@ test("It displays the correct movie corrisponding with what year filter has been
   );
 
   await useFilterYear();
+
+  expect(await screen.findByText("Whiplash"))
+    .toBeInTheDocument();
+});
+
+test("It displays the correct movie corrisponding with what rating filter has been selected", async () => {
+  window.localStorage.setItem("token", "testToken");
+
+  getMovies.mockResolvedValue({
+    movies: [
+      {
+        _id: "12345",
+        title: "Test Movie",
+        genre: "Fantasy",
+        releaseYear: 2000,
+        description: "This is a test film",
+        image: "",
+        director: "Test Guy",
+        averageRating: 4.4
+      },
+      {
+        _id: "123456",
+        title: "Whiplash",
+        genre: "Drama",
+        releaseYear: 2014,
+        description: "This is a test film",
+        image: "",
+        director: "Damien Chazelle",
+        averageRating: 4.4
+      },
+    ],
+    token: "newToken",
+  });
+
+  render(
+    <MemoryRouter>
+      <BrowsingPage />
+    </MemoryRouter>
+  );
+
+  await useFilterRating();
 
   expect(await screen.findByText("Whiplash"))
     .toBeInTheDocument();
@@ -341,6 +403,7 @@ test("It displays the correct movie when all filters and search is used together
         description: "This is a test film",
         image: "",
         director: "Test Guy",
+        averageRating: 4.4
       },
       {
         _id: "123456",
@@ -350,6 +413,7 @@ test("It displays the correct movie when all filters and search is used together
         description: "This is a test film",
         image: "",
         director: "Damien Chazelle",
+        averageRating: 4.4
       },
     ],
     token: "newToken",
@@ -364,6 +428,7 @@ test("It displays the correct movie when all filters and search is used together
   await useSearchBarTitle();
   await useFilterGenre();
   await useFilterYear();
+  await useFilterRating();
 
   expect(await screen.findByText("Whiplash"))
     .toBeInTheDocument();
