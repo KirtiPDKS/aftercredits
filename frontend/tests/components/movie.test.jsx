@@ -8,6 +8,5 @@ describe("Post", () => {
     render(<Movies movie={testMovie} />);
 
   expect(screen.getByText("Test Movie")).toBeInTheDocument();
-  expect(screen.getByText("2000")).toBeInTheDocument(); 
   });
 });

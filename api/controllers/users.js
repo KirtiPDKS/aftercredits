@@ -1,4 +1,5 @@
 const User = require("../models/user");
+const Follower = require("../models/follower")
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const { generateToken } = require("../lib/token");
@@ -50,8 +51,16 @@ async function getCurrentUser(req, res) {
       return res.status(404).json({ message: "User not found" });
     }
     // const newToken = generateToken(req.user_id);
+    const followersCount = await Follower.countDocuments({
+      following_id: req.user_id,
+    });
 
-    res.status(200).json({user:user});
+    const followingCount = await Follower.countDocuments({
+      follower_id: req.user_id,
+    });
+
+
+    res.status(200).json({user:user, followers:followersCount, following:followingCount});
   } catch (err) {
     res.status(500).json({ message: "Server error" });
   }
@@ -120,7 +129,21 @@ async function getUserByUsername(req,res) {
     if (!user){
       return res.status(404).json({message:"User doesn't exist. Unable to get user information"})
     }
-    return res.status(200).json({message:"Succesfully got user",user:user})
+    const isFollowing = await Follower.exists({follower_id:req.user_id, following_id:user._id})
+    const isFollower = await Follower.exists({follower_id:user._id, following_id:req.user_id})
+
+    const followersCount = await Follower.countDocuments({
+      following_id: user._id,
+    });
+
+    const followingCount = await Follower.countDocuments({
+      follower_id: user._id,
+    });
+
+
+
+    return res.status(200).json({message:"Succesfully got user",user:user, isFollowing:!!isFollowing, 
+      isFollower:!!isFollower, followers:followersCount,following:followingCount})
   }
 
   catch(err){

@@ -4,6 +4,11 @@ import { getCurrentUser, getUser } from "../../services/users";
 import { getUserWatchedMovies } from "../../services/moviesWatched";
 import { Link } from "react-router-dom";
 import Movies from "../../components/Movie";
+import FollowButton from "../../components/FollowButton";
+import { use } from "react";
+import { getUsersFollowers,getUsersFollowing } from "../../services/followers";
+import FollowerModal from "../../components/FollowersModal";
+import FollowingModal from "../../components/FollowingModal";
 
 export function GenericProfilePage() {
 const {username} = useParams();
@@ -11,6 +16,11 @@ const navigate = useNavigate();
 const [user, setUser] = useState(null)
 const [watchedMovies, setWatchedMovies] = useState([])
 const [Image, setImage] = useState(null);
+const [isFollowing, setisFollowing] = useState(false)
+const [followerCount, setFollowerCount] = useState(0)
+const [followingCount, setFollowingCount] = useState(null)
+const [followers, setFollowers] = useState(null)
+const [following, setFollowing] = useState(null)
 
     useEffect(() => {
     const token = localStorage.getItem("token");
@@ -29,22 +39,32 @@ const [Image, setImage] = useState(null);
     getUser(username,token)
         .then((data) => {
             setUser(data.user);
+            setisFollowing(data.isFollowing);
+            setFollowerCount(data.followers);
+            setFollowingCount(data.following);
+
             if (data.user.profile_image) {
             setImage(
             `${import.meta.env.VITE_BACKEND_URL}${data.user.profile_image}`
             );
         } else {
             setImage("https://png.pngtree.com/png-vector/20221130/ourmid/pngtree-user-profile-button-for-web-and-mobile-design-vector-png-image_41767880.jpg")
-        }
-            if(data.token){
-            localStorage.setItem("token", data.token);
-            }
-        })
+        };
+        if(data.token){localStorage.setItem("token", data.token)};
+        
+      return Promise.all([
+      getUsersFollowers(data.user._id, token),
+      getUsersFollowing(data.user._id, token),
+    ]);
+  })
+  .then(([followersData, followingData]) => {
+    setFollowers(followersData.followers);
+    setFollowing(followingData.following);
+  })
         .catch((err) => {
             console.error(err);
             navigate("/login");
         });
-
         getUserWatchedMovies(username,token)
         .then((data) => {
             setWatchedMovies(data.movies);
@@ -72,7 +92,13 @@ return (
         />
       )}
     <h2 className="mb-0">{user.username}</h2>
+     <span><FollowButton userId={user._id} initiallyFollowing={isFollowing}/></span>
+     <span class="text-primary" style={{cursor:"pointer"}} data-bs-toggle="modal" data-bs-target="#FollowerModal">
+      {followerCount} Followers</span>
+     <span class="text-primary" style={{cursor:"pointer"}} data-bs-toggle="modal" data-bs-target="#FollowingModal">
+      {followingCount} Following</span>
     </div>
+   
     </div>
 
     {/* Movies Watched Section */}
@@ -126,6 +152,11 @@ return (
           ))
       )}
     </div>
+    <FollowerModal followers={followers} />
+    <FollowingModal following={following}/>
     </div>
 );
+
+
+
 }

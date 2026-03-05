@@ -139,7 +139,7 @@ export function BrowsingPage() {
           <div className="col-12 col-sm-6 col-md-4 col-lg-3 mb-4"
           key={movie._id}> 
             <Link to={`/movies/${movie._id}`} className="text-decoration-none text-dark">
-              <Movies movie={movie} />
+              <Movies movie={movie} img_height />
             </Link>
           </div> 
         ))}

@@ -8,13 +8,6 @@ html, body, #root {
   width: 100%;
   background-color: black;
 }
-body {
-  font-family: 'Archivo', 'Open Sans', sans-serif;
-  background-color: black; 
-  color: white; 
-}
-
-
 .Title{
   font-family:'Times New Roman', Times, serif;
   font-weight: bold;
@@ -44,7 +37,7 @@ body {
   }
 }
 #scroll {
-    max-height: 535px;
+    max-height: 80vh;
     overflow-y: auto;
 }
 select, #resetFilter{

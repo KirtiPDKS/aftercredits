@@ -195,6 +195,14 @@ describe("/moviesWatched", () => {
     });
   });
 
+  test("responds with 401 if token missing", async () => {
+    const response = await request(app)
+      .get("/moviesWatched/name/movie-addict");
+      expect(response.status).toEqual(401);
+});
+
+    
+// --- DELETE routes---
 
   // DELETE /moviesWatched/:movieId
 
@@ -241,5 +249,7 @@ describe("/moviesWatched", () => {
 
       expect(response.status).toEqual(401);
     });
+  });
+});
   });
 });

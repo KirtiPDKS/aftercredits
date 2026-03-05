@@ -4,12 +4,20 @@ import { getCurrentUser} from "../../services/users";
 import { getMyWatchedMovies } from "../../services/moviesWatched";
 import { Link } from "react-router-dom";
 import Movies from "../../components/Movie";
+import { getMyFollowers,getMyFollowing } from "../../services/followers";
+import FollowerModal from "../../components/FollowersModal";
+import FollowingModal from "../../components/FollowingModal";
+
 
 export function YourProfilePage() {
 const navigate = useNavigate();
 const [user, setUser] = useState(null)
 const [watchedMovies, setWatchedMovies] = useState([])
 const [Image, setImage] = useState(null);
+const [followerCount, setFollowerCount] = useState(0)
+const [followingCount, setFollowingCount] = useState(null)
+const [followers, setFollowers] = useState(null)
+const [following, setFollowing] = useState(null)
 
     useEffect(() => {
     const token = localStorage.getItem("token");
@@ -21,6 +29,8 @@ const [Image, setImage] = useState(null);
     getCurrentUser(token)
         .then((data) => {
             setUser(data.user);
+            setFollowerCount(data.followerCount);
+            setFollowingCount(data.followingCount);
             if (data.user.profile_image) {
             setImage(
               `${import.meta.env.VITE_BACKEND_URL}${data.user.profile_image}`
@@ -31,7 +41,15 @@ const [Image, setImage] = useState(null);
             if(data.token){
             localStorage.setItem("token", data.token);
             }
-        })
+            return Promise.all([
+                  getMyFollowers(token),
+                  getMyFollowing(token),
+                ]);
+              })
+              .then(([followersData, followingData]) => {
+                setFollowers(followersData.followers);
+                setFollowing(followingData.following);
+              })
         .catch((err) => {
             console.error(err);
         });
@@ -62,6 +80,10 @@ return (
         />
       )}
     <h2 className="mb-0">{user.username}</h2>
+    <span class="text-primary" style={{cursor:"pointer"}} data-bs-toggle="modal" data-bs-target="#FollowerModal">
+      {followerCount} Followers</span>
+    <span class="text-primary" style={{cursor:"pointer"}} data-bs-toggle="modal" data-bs-target="#FollowingModal">
+      {followingCount} Following</span>
     </div>
     </div>    
 
@@ -72,10 +94,10 @@ return (
       {watchedMovies.length === 0 ? (
         <p className="text-muted">No movies watched yet.</p>
       ) : (
-        <div className="row">
+        <div className="d-flex overflow-x-auto gap-3 align-items-stretch">
           {watchedMovies.map((movie) => (
             <div
-              className="d-flex overflow-x-auto gap-3 align-items-stretch"
+              className="flex-shrink-0 d-flex h-100"
               key={movie.movie_id._id}
             >
               <Link
@@ -127,6 +149,8 @@ return (
         </Link>
       </div>
     )}
+        <FollowerModal followers={followers} />
+        <FollowingModal following={following}/>
 
   </div>
 );

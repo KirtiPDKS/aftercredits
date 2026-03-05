@@ -10,6 +10,7 @@ let token;
 let userId;
 
 beforeAll(async () => {
+  await User.deleteMany({});
   const user = new User({
     email: "movie-test@test.com",
     username: "tester",
@@ -30,6 +31,7 @@ beforeAll(async () => {
 
 describe("/movies", () => {
   beforeEach(async () => {
+    
     await Movie.deleteMany({});
   });
 

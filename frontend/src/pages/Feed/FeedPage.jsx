@@ -37,14 +37,17 @@ export function FeedPage() {
   }, [navigate]);
 
   return (
-    <>
+    <div>
       <h2 className="mb-1">Movies</h2>
 
-      <p className="text-body-secondary">Browse through all films.</p>
+      <div id="scroll">
+      <p className="text-body-secondary">Highest rated films.</p>
       <div className="container  mb-4" >
         <div className="d-flex overflow-x-auto gap-3 align-items-stretch">
-        {movies.map((movie) => (
-          <div className="flex-shrink-0 d-flex"
+        {movies.filter((movie)=>movie.averageRating>=4)
+        .sort((a, b) => b.averageRating - a.averageRating)
+        .map((movie) => (
+          <div className="flex-shrink-0 d-flex h-100"
           style={{height:"300px"}}
           key={movie._id}> 
             <Link to={`/movies/${movie._id}`} className="text-decoration-none text-dark h-100 d-flex flex-column">
@@ -58,10 +61,10 @@ export function FeedPage() {
       <h5>For You</h5> 
       <p className="text-body-secondary">Your watchlist. Click and leave a review on a film...</p>
 
-    <div className="container mb-4 ">
+    <div className="container ">
         <div className="d-flex overflow-x-auto gap-3 align-items-stretch">
         {moviesToWatch.filter((movie) => movie.movie_id).map((movie) => (
-          <div className="flex-shrink-0 d-flex"
+          <div className="flex-shrink-0 d-flex h-100"
           style={{height:"300px"}}
           key={movie._id}> 
             <Link to={`/movies/${movie.movie_id._id}`} className="text-decoration-none text-dark h-100 d-flex flex-column">
@@ -71,6 +74,8 @@ export function FeedPage() {
         ))}
       </div>
       </div>
-    </>
+    </div>
+    </div>
+
   );
 }
