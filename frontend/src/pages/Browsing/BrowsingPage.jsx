@@ -17,7 +17,7 @@ export function BrowsingPage() {
   const [search, setSearch] = useState("");
   const [genre, setGenre] = useState("");
   const [year, setYear] = useState([0, currentYear]);
-  const [rating, setRating] = useState([0, 5]);
+  const [rating, setRating] = useState([0, 6]);
   const [sortBy, setSortBy] = useState("");
   const navigate = useNavigate();
 
@@ -116,7 +116,7 @@ export function BrowsingPage() {
         </select>
         <select name="rating" className="form-select w-50  m-2" aria-label="Default select example" onChange={(e) => setRating(e.target.value.split(','))}>
           <option selected disabled hidden>Average Rating</option>
-          <option value={[0,5]}>All</option>
+          <option value={[0,6]}>All</option>
           <option value={[5,6]}>5</option>
           <option value={[4,5]}>4 - 5</option>
           <option value={[3,4]}>3 - 4</option>
