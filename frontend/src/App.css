@@ -37,7 +37,7 @@ html, body, #root {
   }
 }
 #scroll {
-    max-height: 80vh;
+    max-height: 60vh;
     overflow-y: auto;
 }
 select, #resetFilter{
@@ -58,6 +58,15 @@ select, #resetFilter{
   color: white;
 }
 
+#scroll-user-page {
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+#scroll-home{
+    max-height: 80vh;
+    overflow-y: auto;
+  
 .follow-button {
   background-color: transparent; 
   color: white;

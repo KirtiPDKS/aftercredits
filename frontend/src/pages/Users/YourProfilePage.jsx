@@ -69,7 +69,7 @@ const [following, setFollowing] = useState([])
 if (!user) return <p>Loading user...</p>
 
 return (
-  <div className="container mt-4">
+  <div className="container mt-4" id="scroll-user-page">
     <div className="card shadow-sm mb-4 p-4">
       <div className="d-flex align-items-center justify-content-center gap-3">
       {Image && (
