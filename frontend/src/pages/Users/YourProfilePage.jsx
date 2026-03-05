@@ -15,9 +15,9 @@ const [user, setUser] = useState(null)
 const [watchedMovies, setWatchedMovies] = useState([])
 const [Image, setImage] = useState(null);
 const [followerCount, setFollowerCount] = useState(0)
-const [followingCount, setFollowingCount] = useState(null)
-const [followers, setFollowers] = useState(null)
-const [following, setFollowing] = useState(null)
+const [followingCount, setFollowingCount] = useState(0)
+const [followers, setFollowers] = useState([])
+const [following, setFollowing] = useState([])
 
     useEffect(() => {
     const token = localStorage.getItem("token");
@@ -29,8 +29,8 @@ const [following, setFollowing] = useState(null)
     getCurrentUser(token)
         .then((data) => {
             setUser(data.user);
-            setFollowerCount(data.followerCount);
-            setFollowingCount(data.followingCount);
+            setFollowerCount(data.followers);
+            setFollowingCount(data.following);
             if (data.user.profile_image) {
             setImage(
               `${import.meta.env.VITE_BACKEND_URL}${data.user.profile_image}`
@@ -49,6 +49,7 @@ const [following, setFollowing] = useState(null)
               .then(([followersData, followingData]) => {
                 setFollowers(followersData.followers);
                 setFollowing(followingData.following);
+                console.log(followingData)
               })
         .catch((err) => {
             console.error(err);
@@ -80,9 +81,9 @@ return (
         />
       )}
     <h2 className="mb-0">{user.username}</h2>
-    <span class="text-primary" style={{cursor:"pointer"}} data-bs-toggle="modal" data-bs-target="#FollowerModal">
+    <span className="text-primary" style={{cursor:"pointer"}} data-bs-toggle="modal" data-bs-target="#FollowerModal">
       {followerCount} Followers</span>
-    <span class="text-primary" style={{cursor:"pointer"}} data-bs-toggle="modal" data-bs-target="#FollowingModal">
+    <span className="text-primary" style={{cursor:"pointer"}} data-bs-toggle="modal" data-bs-target="#FollowingModal">
       {followingCount} Following</span>
     </div>
     </div>    
@@ -150,7 +151,7 @@ return (
       </div>
     )}
         <FollowerModal followers={followers} />
-        <FollowingModal following={following}/>
+        <FollowingModal following={following}/> 
 
   </div>
 );
