@@ -1,12 +1,3 @@
-// function Followers({followers}){
-//     return <div class="modal-dialog modal-dialog-scrollable">
-        
-// </div>
-// }
-
-// export default Followers
-
-// FollowerModal.jsx
 export default function FollowerModal({ followers }) {
   return (
     <div
