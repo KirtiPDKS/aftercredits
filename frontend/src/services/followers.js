@@ -12,7 +12,7 @@ export async function followUser(userId, token) {
     const data = await response.json();
 
     if (!response.ok) {
-        throw new Error(json.message || "Failed to unfollow");
+        throw new Error(data.message || "Failed to unfollow");
     }
 
     return data;
@@ -30,7 +30,7 @@ export async function unfollowUser(userId, token) {
     const data = await response.json();
 
     if (!response.ok) {
-        throw new Error(json.message || "Failed to unfollow");
+        throw new Error(data.message || "Failed to unfollow");
     }
 
     return data;
@@ -48,7 +48,7 @@ export async function getUsersFollowers(userId, token) {
     const data = await response.json();
 
     if (!response.ok) {
-        throw new Error(json.message || "Failed to unfollow");
+        throw new Error(data.message || "Failed to get followers");
     }
 
     return data;
@@ -66,7 +66,7 @@ export async function getUsersFollowing(userId, token) {
     const data = await response.json();
 
     if (!response.ok) {
-        throw new Error(json.message || "Failed to unfollow");
+        throw new Error(data.message || "Failed to get following");
     }
 
     return data;
@@ -84,7 +84,7 @@ export async function getMyFollowers(token) {
     const data = await response.json();
 
     if (!response.ok) {
-        throw new Error(json.message || "Failed to unfollow");
+        throw new Error(data.message || "Failed to get followers");
     }
 
     return data;
@@ -102,7 +102,7 @@ export async function getMyFollowing(token) {
     const data = await response.json();
 
     if (!response.ok) {
-        throw new Error(json.message || "Failed to unfollow");
+        throw new Error(data.message || "Failed to get users following");
     }
 
     return data;
