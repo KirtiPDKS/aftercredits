@@ -13,6 +13,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 const UsersController = require("../controllers/users");
+const FollowerController = require("../controllers/followers")
 const tokenChecker = require("../middleware/tokenChecker")
 
 const router = express.Router();
@@ -24,6 +25,13 @@ router.put("/me/password", tokenChecker, UsersController.updateCurrentUserPasswo
 router.get("/all",UsersController.getAllUsers)
 router.get("/:username", tokenChecker, UsersController.getUserByUsername)
 
+//Followers routes
+router.get("/me/followers", tokenChecker, FollowerController.getCurrentUsersFollowers);
+router.get("/me/following", tokenChecker, FollowerController.getCurrentUserFollowing);
+router.post('/:id/follow', tokenChecker, FollowerController.followUser)
+router.delete('/:id/unfollow', tokenChecker, FollowerController.unfollowUser)
+router.get('/:id/followers',tokenChecker, FollowerController.getFollowersById)
+router.get('/:id/following',tokenChecker, FollowerController.getFollowingById)
 
 
 

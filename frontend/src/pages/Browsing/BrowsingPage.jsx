@@ -99,14 +99,17 @@ export function BrowsingPage() {
         </div>
       </form>
       <div className="container row" id="scroll">
+      <div className="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3" id="scroll">
+    
         {filteredMovies.map((movie) => (
-          <div className="col-12 col-sm-6 col-md-4 col-lg-3 mb-4"
+          <div className="col d-flex h-100"
           key={movie._id}> 
-            <Link to={`/movies/${movie._id}`} className="text-decoration-none text-dark">
+            <Link to={`/movies/${movie._id}`} className="text-decoration-none ext-dark d-flex flex-column">
               <Movies movie={movie} />
             </Link>
           </div> 
         ))}
+      </div>
       </div>
       {/* putting this modal outside the loop as only one version of this should be shown at the time (the one for the movie clicked) */}
       {showModal && selectedMovie && ( //both values from the useState hooks need to be true for the modal to render correctly. 

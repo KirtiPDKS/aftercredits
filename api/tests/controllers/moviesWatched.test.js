@@ -201,6 +201,7 @@ describe("GET /moviesWatched/name/:username", () => {
       .get("/moviesWatched/name/movie-addict");
       expect(response.status).toEqual(401);
 });
+
     
 // --- DELETE routes---
 
@@ -251,3 +252,4 @@ describe("DELETE, when token is missing", () => {
   });
 });
   });
+});
