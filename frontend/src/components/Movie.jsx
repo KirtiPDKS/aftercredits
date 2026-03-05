@@ -9,7 +9,12 @@ function Movies(props) {
           src={movie.image}
           alt={`${movie.title} poster`}
           className="card-img-top"
-          style={{width:"100%",height:"224px",objectFit:"cover", borderRadius:"0"}}
+            style={{
+              width: "100%",
+              height: "224px",
+              objectFit: "contain",
+              backgroundColor: "black"
+            }}
           onError={(e) => {
           e.target.onerror = null; // prevents infinite loop
           e.target.src = "https://img.icons8.com/color/1200/broken-image.jpg";
