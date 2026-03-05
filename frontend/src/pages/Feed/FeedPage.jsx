@@ -55,7 +55,7 @@ export function FeedPage() {
       </div>
       </div>
 
-      <h5>For You</h5> 
+      <h5>Your Watchlist</h5> 
       <p className="text-body-secondary">Your watchlist. Click and leave a review on a film...</p>
 
     <div className="container mb-4 ">
