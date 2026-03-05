@@ -7,6 +7,8 @@
 // export default Followers
 
 // FollowerModal.jsx
+import "../App.css"
+
 export default function FollowerModal({ followers }) {
   return (
     <div
@@ -33,12 +35,14 @@ export default function FollowerModal({ followers }) {
             {followers && followers.length > 0 ? (
               <ul className="list-group">
                 {followers.map((follower) => (
+                  <a id="usernameLink" href={`/users/${follower.follower_id.username}`}>
                   <li
                     key={follower.follower_id._id}
                     className="list-group-item d-flex justify-content-between align-items-center"
                   >
                     {follower.follower_id.username}
                   </li>
+                  </a>
                 ))}
               </ul>
             ) : (
