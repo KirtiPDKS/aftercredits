@@ -38,9 +38,8 @@ export function FeedPage() {
 
   return (
     <div>
-      <h2 className="mb-1">Movies</h2>
-
-      <div id="scroll">
+      <div id="scroll-home">
+      <h2 className="mb-1 text-warning Title">Movies</h2>
       <p className="text-body-secondary">Highest rated films.</p>
       <div className="container  mb-4" >
         <div className="d-flex overflow-x-auto gap-3 align-items-stretch">
@@ -58,7 +57,7 @@ export function FeedPage() {
       </div>
       </div>
 
-      <h5>For You</h5> 
+      <h2 className="text-warning Title">Watchlist</h2> 
       <p className="text-body-secondary">Your watchlist. Click and leave a review on a film...</p>
 
     <div className="container ">

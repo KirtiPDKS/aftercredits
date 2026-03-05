@@ -62,3 +62,8 @@ select, #resetFilter{
     max-height: 80vh;
     overflow-y: auto;
 }
+
+#scroll-home{
+    max-height: 80vh;
+    overflow-y: auto;
+}
