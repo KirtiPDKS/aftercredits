@@ -1,13 +1,23 @@
-
 import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { MovieDetailsPage } from "../../src/pages/MovieDetailsPage";
 import { vi } from "vitest";
+import { getCurrentUser } from "../../src/services/users";
+
+vi.mock("../../src/services/users");
 
 beforeEach(() => {
   vi.spyOn(globalThis, "fetch");
   window.localStorage.setItem("token", "fake-token");
   window.alert = vi.fn();
+
+  getCurrentUser.mockResolvedValue({
+    user: {
+      username: "testuser",
+      profile_image: "avatar.jpg",
+    },
+    token: "fake-token",
+  });
 });
 
 afterEach(() => {
@@ -38,6 +48,7 @@ function renderWithRouter() {
 function mockInitialFetches({
   watchlistMovies = [],
   watchedMovies = [],
+  otherReviews = [],
 } = {}) {
   fetch
     // Movie details
@@ -45,12 +56,20 @@ function mockInitialFetches({
       ok: true,
       json: async () => ({ movie: mockMovie }),
     })
-    // Watchlist check
+
+    // Other reviews
+    .mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ reviews: otherReviews }),
+    })
+
+    // Watchlist
     .mockResolvedValueOnce({
       ok: true,
       json: async () => ({ movies: watchlistMovies }),
     })
-    // Watched check
+
+    // Watched
     .mockResolvedValueOnce({
       ok: true,
       json: async () => ({ movies: watchedMovies }),
@@ -62,10 +81,7 @@ test("loads and displays movie details", async () => {
 
   renderWithRouter();
 
-  await waitFor(() =>
-    expect(screen.getByText("Inception")).toBeInTheDocument()
-  );
-
+  expect(await screen.findByText("Inception")).toBeInTheDocument();
   expect(screen.getByText("Christopher Nolan")).toBeInTheDocument();
   expect(screen.getByText("2010")).toBeInTheDocument();
   expect(screen.getByText("Sci-Fi")).toBeInTheDocument();
@@ -77,9 +93,7 @@ test("shows correct initial button states when not in watchlist or watched", asy
 
   renderWithRouter();
 
-  await waitFor(() =>
-    expect(screen.getByText("Inception")).toBeInTheDocument()
-  );
+  await screen.findByText("Inception");
 
   expect(screen.getByText("Add to Watchlist")).toBeInTheDocument();
   expect(screen.getByText("Mark as Watched")).toBeInTheDocument();
@@ -88,7 +102,6 @@ test("shows correct initial button states when not in watchlist or watched", asy
 test("adds movie to watchlist", async () => {
   mockInitialFetches();
 
-  // Mock POST toggle
   fetch.mockResolvedValueOnce({
     ok: true,
     json: async () => ({ message: "Movie added to watchlist" }),
@@ -96,12 +109,9 @@ test("adds movie to watchlist", async () => {
 
   renderWithRouter();
 
-  await waitFor(() =>
-    expect(screen.getByText("Inception")).toBeInTheDocument()
-  );
+  await screen.findByText("Inception");
 
-  const button = screen.getByText("Add to Watchlist");
-  fireEvent.click(button);
+  fireEvent.click(screen.getByText("Add to Watchlist"));
 
   await waitFor(() =>
     expect(fetch).toHaveBeenLastCalledWith(
@@ -112,17 +122,10 @@ test("adds movie to watchlist", async () => {
 });
 
 test("removes movie from watchlist if already added", async () => {
- mockInitialFetches({
-  watchedMovies: [
-    {
-      movie_id: { _id: "123" },
-      rating: 4,
-      review: "Great film"
-    }
-  ]
-});
+  mockInitialFetches({
+    watchlistMovies: [{ movie_id: "123" }],
+  });
 
-  // Mock DELETE toggle
   fetch.mockResolvedValueOnce({
     ok: true,
     json: async () => ({ message: "Removed from watchlist" }),
@@ -130,12 +133,9 @@ test("removes movie from watchlist if already added", async () => {
 
   renderWithRouter();
 
-  await waitFor(() =>
-    expect(screen.getByText(/In Watchlist/)).toBeInTheDocument()
-  );
+  await screen.findByText(/In Watchlist/);
 
-  const button = screen.getByText(/In Watchlist/);
-  fireEvent.click(button);
+  fireEvent.click(screen.getByText(/In Watchlist/));
 
   await waitFor(() =>
     expect(fetch).toHaveBeenLastCalledWith(
@@ -148,7 +148,6 @@ test("removes movie from watchlist if already added", async () => {
 test("marks movie as watched", async () => {
   mockInitialFetches();
 
-  // Mock POST toggle
   fetch.mockResolvedValueOnce({
     ok: true,
     json: async () => ({ message: "Marked as watched" }),
@@ -156,12 +155,9 @@ test("marks movie as watched", async () => {
 
   renderWithRouter();
 
-  await waitFor(() =>
-    expect(screen.getByText("Inception")).toBeInTheDocument()
-  );
+  await screen.findByText("Inception");
 
-  const button = screen.getByText("Mark as Watched");
-  fireEvent.click(button);
+  fireEvent.click(screen.getByText("Mark as Watched"));
 
   await waitFor(() =>
     expect(fetch).toHaveBeenLastCalledWith(
@@ -184,7 +180,6 @@ test("removes movie from watched list if already watched", async () => {
     ],
   });
 
-  // Mock DELETE toggle
   fetch.mockResolvedValueOnce({
     ok: true,
     json: async () => ({ message: "Removed from watched" }),
@@ -192,12 +187,9 @@ test("removes movie from watched list if already watched", async () => {
 
   renderWithRouter();
 
-  await waitFor(() =>
-    expect(screen.getByText(/Watched/)).toBeInTheDocument()
-  );
+  await screen.findByText(/Watched/);
 
-  const button = screen.getByText(/Watched/);
-  fireEvent.click(button);
+  fireEvent.click(screen.getByText(/Watched/));
 
   await waitFor(() =>
     expect(fetch).toHaveBeenLastCalledWith(
@@ -216,19 +208,20 @@ test("displays existing review if movie is already reviewed", async () => {
         rating: 4.5,
         review: "W film",
         createdAt: new Date().toISOString(),
+        user_id: {
+          username: "testuser",
+          profile_image: "avatar.jpg",
+        },
       },
     ],
   });
 
   renderWithRouter();
 
-  await waitFor(() =>
-    expect(screen.getByText("Your Review")).toBeInTheDocument()
-  );
+  expect(await screen.findByText("Your Review")).toBeInTheDocument();
 
-  const reviewCard = screen.getByText("Your Review").closest(".card");
+  const reviewCard = screen.getByText("Your Review").closest("div");
 
-    expect(reviewCard).toBeInTheDocument();
-    expect(reviewCard).toHaveTextContent("W film");
-    expect(reviewCard).toHaveTextContent("4.5");    
+  expect(reviewCard).toHaveTextContent("W film");
+  expect(reviewCard).toHaveTextContent("4.5");
 });
